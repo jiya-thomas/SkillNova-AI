@@ -1,0 +1,120 @@
+{% load static %}
+<title>Skill Nova AI | Register</title>
+<link rel="icon" href="{% static 'images/logo.ico' %}">
+
+<!-- CSS Stylesheet -->
+<link rel="stylesheet" href="{% static 'styles/main.css' %}">
+<link rel="stylesheet" href="{% static 'styles/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'styles/all.min.css' %}">
+
+<!-- Create Account -->
+<section class="container-fluid hero">
+    <div class="row align-items-center">
+        <div class="col-lg-12 d-flex justify-content-center">
+            <div class="card shadow-lg border-0 p-3 form-card">
+                <div class="text-center">
+                    <a href="{% url 'home' %}">
+                        <img class="hero-logo" src="{% static 'images/header-logo.png' %}">
+                    </a>
+                    <h3 class="fw-bold mb-1">Create Account</h3>
+                    <p class="text-dark text-center mb-3">Join the Career Intelligence Platform</p>
+                </div>
+                <form class="needs-validation" method="POST" novalidate>
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <!-- Full Name -->
+                            <label class="form-label fw-medium">Full Name</label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <input type="text" class="form-control" placeholder="Enter Full Name" name="name"
+                                    required>
+                                <div class="invalid-feedback fw-medium">Field is required</div>
+                            </div>
+                        </div>
+                        <!-- Email Address -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium">Email Address</label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                <input type="email" class="form-control" placeholder="Enter Email Address" 
+                                    name="email" required>
+                                <div class="invalid-feedback fw-medium">Enter a valid email address</div>
+                            </div>
+                        </div>
+                        <!-- Phone Number -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium">Phone Number</label>
+                            <div class="input-group input-group-sm has-validation">
+                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                <input type="tel" class="form-control" name="phone" placeholder="Enter Phone Number"
+                                    pattern="[6-9]{1}[0-9]{9}" maxlength="10" required>
+                                <div class="invalid-feedback fw-medium">Enter 10-digit Number</div>
+                            </div>
+
+                        </div>
+                        <!-- Role -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium">Role</label>
+                            <select class="form-select" name="role" required>
+                                <option value="" selected disabled>Select Role</option>
+                                <option value="jobseeker">Jobseeker</option>
+                                <option value="recruiter">Recruiter</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                            <div class="invalid-feedback fw-medium">Field is required</div>
+                        </div>
+                        <!-- Password -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium">Password</label>
+                            <div class="input-group input-group-sm">
+                                <input type="password" class="form-control" name="password"
+                                    placeholder="Enter your Password" id="password" required>
+                                <span class="input-group-text"><i class="fas fa-eye"></i></span>
+                            </div>
+
+                        </div>
+                        <!-- Confirm Password -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium">Confirm Password</label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                <input type="password" class="form-control" name="confirm_password"
+                                    placeholder="Retype your password" id="confirm_password" required>
+                                <div class="invalid-feedback fw-medium">Passwords do not match</div>
+                            </div>
+                        </div>
+                        <!-- Button -->
+                        <div class="col-12 mt-4">
+                            <button class="btn register-btn w-100 py-2">
+                                Create Account
+                            </button>
+                        </div>
+                        <div class="col-12 text-center fw-medium">
+                            Already have an account?
+                            <a href="{% url 'login' %}" class="text-decoration-none fw-medium hero-text">Login</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Toast -->
+    {% if messages %}
+    <div class="toast-container top-0 end-0">
+        {% for message in messages %}
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <img class="me-2" src="{% static 'images/logo.ico' %}" width="24px" alt="logo">
+                <strong class="me-auto">SkillNova AI</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body fw-medium">{{message}}</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>
+
+<script src="{% static 'scripts/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'scripts/validate.js' %}"></script>
