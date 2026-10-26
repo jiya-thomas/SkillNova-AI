@@ -1,0 +1,143 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="skill-hero">
+            <h4><i class="fas fa-paper-plane me-2"></i>Job Applications</h4>
+            <small class="fs-6">Manage your job applications and track your progress 
+                toward your next opportunity.</small>
+        </div>
+        <div>
+        <a href="{% url 'invitations' %}" class="btn btn-sm assess-btn del-btn fw-medium me-1">
+            <i class="fas fa-calendar-check me-1"></i>Interviews
+        </a>
+        <a href="{% url 'jobs' %}" class="btn btn-sm assess-btn add-btn fw-medium">
+            <i class="fas fa-search me-1"></i>Explore Jobs
+        </a>
+        </div>
+    </div>
+
+    <!-- Filter Fields -->
+    <form method="get" class="filter-form mb-4">
+        <div class="row g-3">
+            <!-- Search -->
+            <div class="col-12 col-md-3">
+                <div class="input-group input-group-sm rounded- overflow-hidden">
+                    <span class="input-group-text"><i class="fas fa-search skill-hero"></i></span>
+                    <input class="form-control" name="search" type="search" value="{{search_q}}" 
+                    placeholder="Search Applications">
+                </div>
+            </div>
+            <!-- Work Mode -->
+            <div class="col-12 col-md-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="fas fa-building skill-hero"></i></span>
+                    <select class="form-select form-select-sm" name="mode">
+                        <option value="">Work Mode</option>
+                        {% for work in works %}
+                        <option value="{{work}}">{{work}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <!-- Date -->
+            <div class="col-12 col-md-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="fas fa-calendar-alt skill-hero"></i></span>
+                    <select class="form-select form-select-sm" name="mode">
+                        <option value="">Applied</option>
+                        {% for value,name in date %}
+                        <option value="{{value}}">{{name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <!-- Status -->
+            <div class="col-12 col-md-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="fas fa-check-circle skill-hero"></i></span>
+                    <select class="form-select form-select-sm" name="mode">
+                        <option value="">Status</option>
+                        {% for value,name in status %}
+                        <option value="{{value}}">{{name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <!-- Filter Button -->
+            <div class="col-12 col-md-3">
+                <div class="d-flex">
+                    <button class="filter-btn btn btn-sm me-2 px-3"><i class="fas fa-filter me-2"></i>Filter</button>
+                    <button class="btn btn-sm apply-btn assess-btn px-3"><i class="fas fa-close me-2"></i>Clear</button>
+                </div>
+            </div>
+        </div>
+    </form> 
+    
+    <!-- Applied Jobs -->
+    <div class="card skill-card table-responsive">
+        <div class="card-body">
+            <table class="table job-table">
+                <thead>
+                    <tr class="text-uppercase">
+                        <td>Job</td> <td>Work</td>
+                        <td>AI Score</td> <td>Status</td>
+                        <td>Applied on</td> <td>Actions</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for app in applied %}
+                    <tr>
+                        <td>
+                            <div class="fw-medium mb-1">{{app.job.title}}</div>
+                            <div class="text-muted">{{app.job.company_name}}</div>
+                        </td>
+                        <td>
+                            <div class="mb-1"><span class="badge work-badge"><i class="fas fa-briefcase me-1"></i>{{app.job.work_mode}}</span></div>
+                            <div class="text-muted"><i class="fas fa-location-dot me-1"></i>{{app.job.location}}</div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="badge ai-badge">{{app.ai_suitability_score}}%</span>
+                                <div class="progress flex-grow-1" style="height: 6px;">
+                                    <div class="progress-bar ai-progress" style="--progress: {{app.ai_suitability_score}}%"></div>
+                                </div>    
+                            </div>
+                            <small class="text-muted">
+                                {% if ai_suitability_score >= 80 %} Strong Fit
+                                {% elif ai_suitability_score >= 60 %} Good Match
+                                {% else %} Developing Fit {% endif %}
+                            </small>
+                        </td>
+                        <td>
+                            <span class="status-badge status-{{ app.status }}">
+                                <i class="fas fa-circle me-1"></i>{{ app.status|title }}
+                            </span>  
+                        </td>
+                        <td>
+                            <div class="text-muted">{{app.applied_at|date:"M d, Y" }}</div>
+                        </td>
+                        <td>
+                            <button class="btn btn-light" type="button" data-bs-toggle="dropdown">
+                                 <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item btn btn-light text-muted fw-medium border-bottom" 
+                                    href="{% url 'jobs' %}"><i class="fa-solid fa-eye me-2"></i>View Job
+                                    <a class="dropdown-item btn btn-light text-danger fw-medium"
+                                    href=""><i class="fas fa-arrow-rotate-left me-2"></i>Withdraw</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div> 
+    
+</div>
+{% endblock %}

@@ -1,0 +1,238 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="skill-hero mb-1">
+                <i class="fas fa-briefcase me-2"></i>Job Portal
+            </h4>
+            <small class="skill-hero fs-6">Discover opportunities that
+                match your skills and career goals.</small>
+        </div>
+        <a href="{% url 'applied' %}" class="btn btn-sm assess-btn del-btn fw-medium">
+            <i class="fas fa-paper-plane me-1"></i>Applied Jobs
+        </a>
+    </div>
+
+    <!-- Filter Control -->
+    <form method="get" class="filter-form">
+        <div class="row g-2 mt-2 mb-4">
+            <!-- Search -->
+            <div class="col-12 col-md-3">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="fas fa-search skill-hero"></i></span>
+                    <input class="form-control" name="search" type="text" value="{{search_q}}" 
+                    placeholder="Search Job, Comapany or Skill">
+                </div>
+            </div>
+            <!-- Location -->
+            <div class="col-12 col-md-3">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="fas fa-location-dot skill-hero"></i></span>
+                    <input class="form-control" name="location" type="text" value="{{loc_q}}" 
+                    placeholder="Search Locations">
+                </div>
+            </div>
+            <!-- Experience -->
+            <div class="col-12 col-md-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="fas fa-clock skill-hero"></i></span>
+                    <select class="form-select form-select-sm" name="experience">
+                        <option value="">Experience</option>
+                        {% for name,value in experience %}
+                        <option value="{{value}}">
+                            {{name}}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <!-- Work Mode -->
+            <div class="col-12 col-md-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="fas fa-building skill-hero"></i></span>
+                    <select class="form-select form-select-sm" name="mode">
+                        <option value="">Work Mode</option>
+                        {% for work in works %}
+                        <option value="{{work}}">
+                            {% if mode_q == work %}selected{% endif %}
+                            {{work|title}}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <!-- Filter Button -->
+            <div class="col-12 col-md-2">
+                <div class="d-flex">
+                    <button class="filter-btn btn btn-sm me-2 px-3"><i class="fas fa-filter me-2"></i>Filter</button>
+                    <button class="btn btn-sm apply-btn assess-btn"><i class="fas fa-close"></i></button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Job Listings -->
+    <div class="row g-3">
+        {% for job in jobs %}
+        <div class="col-md-4">
+            <div class="card skill-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <div>
+                            <!-- Job Role -->
+                            <h5 class="fw-bold skill-hero mb-1">{{job.title}}</h5>
+
+                            <!-- Recruiter -->
+                            <div class="text-dark fw-medium mb-1">{{job.company_name}}</div>
+
+                            <!-- Location -->
+                            <div class="text-muted fw-medium mb-1">
+                                <i class="fas fa-location-dot me-1"></i>{{job.location}}
+                            </div>
+
+                            <!-- Experience & Work Mode -->
+                            <div class="d-flex">
+                                <span class="text-muted fw-medium me-2">
+                                    <i class="fas fa-clock me-1"></i>{{job.experience}}
+                                </span>
+                                <span class="badge job-badge fw-medium">{{job.work_mode}}</span>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm filter-btn px-3" data-bs-toggle="collapse"
+                            data-bs-target="#job-{{forloop.counter}}">
+                            <i class="fas fa-eye me-1"></i>View</button>
+                    </div>
+                    <!-- Job Details -->
+                    <div class="collapse" id="job-{{forloop.counter}}">
+                        <!-- Required Skills -->
+                        <div class="mb-2">
+                            <h6 class="fw-medium text-muted">Required Skills</h6>
+                            {% for skill in job.skills_list %}
+                            <div class="badge job-badge">{{skill}}</div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Job Qualification -->
+                        <div class="d-flex mb-2">
+                            <span class="text-muted fw-medium me-1">
+                                <i class="fas fa-graduation-cap text-success me-1"></i>Qualification:
+                            </span>
+                            <span class="text-muted">{{job.qualification}}</span>
+                        </div>
+
+                        <!-- Salary -->
+                        <div class="d-flex mb-2 border-bottom">
+                            <span class="text-muted fw-medium me-1">
+                                <i class="fas fa-indian-rupee-sign text-secondary me-1"></i>Salary:
+                            </span>
+                            <span class="text-muted mb-2">{{job.salary_range}}</span>
+                        </div>
+
+                        <!-- Deadline & Opening -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="text-muted">
+                                <div class="small mb-1">Deadline: {{job.deadline|date:"M d, Y"}}</div>
+                                <small>Openings: <span>{{job.openings}}</span></small>
+                            </div>
+                            {% if job.id in applied %}
+                            <span class="badge bg-success-subtle text-success border border-success-subtle py-2 px-3 ">
+                                <i class="fas fa-check-circle me-1"></i>Applied
+                            </span>
+                            {% else %}
+                            <a href="#" class="btn btn-sm apply-btn" data-bs-toggle="modal" 
+                            data-bs-target="#jobModal-{{forloop.counter}}">
+                                <i class="fas fa-paper-plane me-2"></i>Apply Now</a>
+                            {% endif %}    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Job Modal -->
+        <div class="modal job-modal fade" id="jobModal-{{forloop.counter}}" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content profile-card">
+                    <div class="modal-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <img class="img-thumbnail logo me-2" src="{% static 'images/logo.ico' %}">
+                            <div>
+                                <h6 class="modal-title skill-hero mb-1">Job Application</h6>
+                                <div class="small text-muted fw-semibold">
+                                    {{job.title}} | {{ job.company_name }}
+                                </div>
+                            </div>
+                            <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="p-2 bg-light-subtle rounded border mb-3 skill-hero skill-card">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div><i class="fas fa-robot me-2"></i></div>
+                                <span class="fs-6">Get your <span class="fw-medium">AI Suitability Score</span>
+                                    based on your verified skills and projects.</span>
+                            </div>
+                        </div>
+                        <form method="post" class="profile-form" action="{% url 'apply_job' job.id %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Applicant Name</label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        value="{{ profile.user.name }}" readonly>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control form-control-sm"
+                                        value="{{ profile.user.email }}" readonly>
+                                </div>
+                            
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Highest Qualification</label>
+                                    <input type="text" class="form-control form-control-sm" value="{{job.qualification}}"
+                                        readonly>
+                                </div>
+
+                                <div class="col-md-8 mb-3">
+                                    <label class="form-label">Verified Competencies</label>
+                                    <input type="text" class="form-control form-control-sm" value="{{job.skills_list|join:', '}}" readonly>
+                                </div>
+
+                                <div class="col-12 mb-3">
+                                    <label class="form-label">
+                                        Message to Hiring Partner <small class="text-muted">(Optional)</small>
+                                    </label>
+                                    <textarea class="form-control" rows="3" style="resize: none;"
+                                        placeholder="Write a message to the recruiter..."></textarea>
+                                </div>
+
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-sm add-btn fw-medium me-2">
+                                        Apply Now<i class="ms-1 fas fa-circle-right"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-secondary fw-medium"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center mt-5">
+            <div class="mb-3">
+                <i class="fas fa-briefcase text-muted" style="font-size: 3rem;"></i>
+            </div>
+
+            <h6 class="fw-semibold mb-2">No Jobs Found</h6>
+            <p class="text-muted mb-4">No jobs match your search. 
+                Try different filters or check back soon.</p>   
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock %}
