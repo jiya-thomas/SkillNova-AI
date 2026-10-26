@@ -1,0 +1,32 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+
+# Local databases
+*.sqlite3
+
+# Django generated files
+staticfiles/
+
+# Uploaded media
+media/*
+!media/.gitkeep
+
+# Large GGUF models
+models/*.gguf
+models/**/*.gguf
+
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Selenium artifacts
+geckodriver.log
+chromedriver.log
+
+# Editors and operating systems
+.vscode/
