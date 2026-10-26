@@ -1,0 +1,380 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content%}
+<div class="container-fluid p-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-start">
+        <div>
+            <h4 class="skill-hero"><i class="fas fa-user-circle me-2"></i>My Profile</h4>
+            <small class="fs-6 skill-hero">Manage your profile, skills, projects,
+                certifications and preferences</small>
+        </div>
+        <div>
+            <form method="post" enctype="multipart/form-data" action="{% url 'profile' %}">
+                {% csrf_token %}
+                <label for="resumeupload" class="btn btn-sm nav-btn fw-medium">
+                    <i class="fas fa-upload me-1"></i>Upload Resume
+                </label>
+                <input type="file" id="resumeupload" name="resume" accept=".pdf" onchange="this.form.submit()" hidden>
+            </form>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <ul class="nav nav-tabs profile-tabs mt-3">
+        <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile" href="#"></i>Profile</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#career" href="#">Career</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#portfolio" href="#">Portfolio</a>
+        </li>
+    </ul>
+
+    <form class="profile-form" enctype="multipart/form-data" 
+        action="{% url 'save_profile' %}" method="post">
+        {% csrf_token %}
+        <div class="tab-content mt-4">
+            <div class="tab-pane show fade active" id="profile">
+                <!-- Profile Information -->
+                <div class="col-md-9 mb-4">
+                    <h5 class="skill-hero mb-3">
+                        <i class="fas fa-users me-2"></i>Profile Information
+                    </h5>
+                    <div class="card profile-card">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">Full Name</label>
+                                    <input class="form-control form-control-sm" name="fullname" value="{{user.name}}"
+                                        placeholder="e.g. John Daniel" type="text" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Email</label>
+                                    <input class="form-control form-control-sm" name="email" value="{{user.email}}"
+                                        placeholder="e.g. name@example.com" type="email" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Contact</label>
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">+91</span>
+                                        <input class="form-control form-control-sm" name="contact"
+                                            value="{{user.phone}}" placeholder="555 123 4567" type="tel" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">State</label>
+                                    <select class="form-select form-select-sm" name="state">
+                                        <option value="">Select State</option>
+                                        {% for state in states %}
+                                            <option value="{{state}}"
+                                            {% if state in state_name %}selected{% endif %}>
+                                            {{state}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Country</label>
+                                    <select class="form-select form-select-sm" name="country">
+                                        <option value="">Select Country</option>
+                                        {% for country in nation %}
+                                            <option value="{{country}}"
+                                            {% if country in country_name %}selected{% endif %}>
+                                            {{country}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Upload Image</label>
+                                    <input type="file" class="form-control form-control-sm" name="image">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Education -->
+                <div class="col-md-9">
+                    <h5 class="skill-hero mb-3">
+                        <i class="fas fa-school me-2"></i>Education
+                    </h5>
+                    <div class="card profile-card">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-5">
+                                    <label class="form-label">Institution</label>
+                                    <input class="form-control form-control-sm" name="institution"
+                                        value="{{institution}}" type="text"
+                                        placeholder="e.g. University of Kerala">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Degree</label>
+                                    <select class="form-select form-select-sm" name="degree">
+                                        <option>Select Degree</option>
+                                        {% for deg in degrees %}
+                                        <option value="{{deg}}" 
+                                        {% if deg == degree %} selected
+                                            {% endif %}>
+                                            {{deg}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Course</label>
+                                    <select class="form-select form-select-sm" name="course">
+                                        <option>Select Course</option>
+                                        {% for name in courses %}
+                                        <option value="{{name}}" 
+                                        {% if name == course %}selected {% endif %}>{{name}}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">CGPA</label>
+                                    <input type="number" name="cgpa" placeholder="e.g. 8.57"
+                                        value="{{ cgpa }}" step="0.01" min="0" max="10"
+                                        class="form-control form-control-sm">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Percentage</label>
+                                    <input type="number" placeholder="e.g. 57%" name="percentage"
+                                    value="{{ percentage }}" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Passing Year</label>
+                                    <input type="text" name="year" placeholder="e.g. 1989"
+                                        value="{{passing_year}}"
+                                        class="form-control form-control-sm">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Career -->
+            <div class="tab-pane fade" id="career">
+                <!-- Skills -->
+                <div class="col-md-9 mb-4">
+                    <h5 class="skill-hero mb-3">
+                        <i class="fas fa-medal me-2"></i>Skills
+                    </h5>
+                    <div class="card profile-card">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Technical Skills</label>
+                                    <select class="form-select form-select-sm skill-select" multiple name="technical">
+                                        <option value="">Choose Skills</option>
+                                        {% for tskills in technical %}
+                                        <option value="{{tskills}}" {% if tskills in technical_skills %}
+                                            selected {% endif %}>{{tskills}}</option>
+                                        {% endfor %}
+                                        {% for skill in technical_skills %}
+                                        {% if skill not in technical %}
+                                        <option value="{{ skill }}" selected>{{ skill }}</option>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Soft Skills</label>
+                                    <select class="form-select form-select-sm skill-select" multiple name="soft">
+                                        <option value="">Choose Skills</option>
+                                        {% for sskills in soft %}
+                                        <option value="{{sskills}}" {% if sskills in soft_skills %} selected
+                                            {% endif %}>{{sskills}}</option>
+                                        {% endfor %}
+                                        {% for skill in soft_skills %}
+                                        {% if skill not in soft %}
+                                        <option value="{{ skill }}" selected>{{ skill }}</option>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Career -->
+                <div class="col-md-9 mb-4">
+                    <h5 class="skill-hero mb-3">
+                        <i class="fas fa-briefcase me-2"></i>Career
+                    </h5>
+                    <div class="card profile-card">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Preferred Role</label>
+                                    <select class="form-select form-select-sm" name="role">
+                                        <option value="" selected disabled>Choose Role</option>
+                                        {% for role in roles %}
+                                            <option value="{{role}}" 
+                                            {% if role == preferred_role %}selected{% endif %}>
+                                            {{role}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Location</label>
+                                    <select class="form-select form-select-sm location-select" name="locations" multiple>
+                                        {% for location in place %}
+                                        <option value="{{location}}"
+                                            {% if location in preferred_location %}selected{% endif %}>
+                                            {{location}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Work Mode</label>
+                                    <select class="form-select form-select-sm" name="work_mode">
+                                        <option value="" selected disabled>Choose Work Type</option>
+                                        {% for work in work %}
+                                        <option value="{{work}}"
+                                        {% if work == work_mode %}selected{% endif %}>{{work}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Expected Salary</label>
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">Rs.</span>
+                                        <input type="text" placeholder="e.g. 12,000" value="{{salary}}"
+                                            class="form-control form-control-sm" name="salary">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Portfolio -->
+            <div class="tab-pane fade" id="portfolio">
+                <!-- Projects -->
+                <div class="col-md-9 mb-4">
+                    <div class="d-flex justify-content-between mb-3">
+                        <h5 class="skill-hero mb-2">
+                            <i class="fas fa-code me-2"></i>Projects
+                        </h5>
+                        <div class="d-flex">
+                            <button type="button" class="btn btn-sm add-btn fw-medium me-2">
+                                <i class="fas fa-plus"></i></button>
+                            <button type="button" class="btn btn-sm del-btn fw-medium">
+                                <i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="card profile-card">
+                        <div class="card-body">
+                            {% for project in projects %}
+                            <div class="row g-3 add-row mb-2">
+                                <div class="col-md-4">
+                                    <label class="form-label">Title</label>
+                                    <input type="text" name="project_title" placeholder="Add Project Title"
+                                        value="{{project.title}}" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Domain</label>
+                                    <input type="text" placeholder="Add Project Domain" value="{{project.domain}}"
+                                        class="form-control form-control-sm" name="project_domain">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Technology</label>
+                                    <input type="text" placeholder="Add Technology" value="{{project.technology}}"
+                                        class="form-control form-control-sm" name="project_tech">
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="row g-3 add-row mb-2">
+                                <div class="col-md-4">
+                                    <label class="form-label">Title</label>
+                                    <input type="text" name="proj_title" placeholder="Add Project Title"
+                                        value="{{project.title}}" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Domain</label>
+                                    <input type="text" placeholder="Add Project Domain"
+                                        class="form-control form-control-sm">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Technology</label>
+                                    <input type="text" placeholder="Add Technology"
+                                        class="form-control form-control-sm">
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <!-- Certificate -->
+                <div class="col-md-9">
+                    <div class="d-flex justify-content-between mb-3">
+                        <h5 class="skill-hero mb-2">
+                            <i class="fas fa-award me-2"></i>Certificates
+                        </h5>
+                        <div class="d-flex">
+                            <button type="button" class="btn btn-sm add-btn fw-medium me-2">
+                                <i class="fas fa-plus"></i></button>
+                            <button type="button" class="btn btn-sm del-btn fw-medium">
+                                <i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="card profile-card">
+                        <div class="card-body">
+                            {% for certificate in certifications %}
+                            <div class="row g-3 add-row mb-2">
+                                <div class="col-md-4">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" placeholder="Certificate Name" value="{{certificate.name}}"
+                                        class="form-control form-control-sm" name="cert_name">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Organization</label>
+                                    <input type="text" placeholder="Issuing Organization"
+                                        value="{{certificate.organization}}" class="form-control form-control-sm"
+                                        name="cert_org">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Issue Date</label>
+                                    <input type="month" name="cert_date" value="{{certificate.issue_date}}"
+                                        class="form-control form-control-sm">
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="row g-3 add-row mb-2">
+                                <div class="col-md-4">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" placeholder="Certificate Name"
+                                        class="form-control form-control-sm" name="cert_name">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Organization</label>
+                                    <input type="text" placeholder="Issuing Organization"
+                                        class="form-control form-control-sm" name="cert_org">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Issue Date</label>
+                                    <input type="month" name="cert_date" class="form-control form-control-sm">
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9 mt-4 mb-4">
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-sm nav-btn fw-medium">
+                    <i class="fas fa-save me-2"></i>Save Profile
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
