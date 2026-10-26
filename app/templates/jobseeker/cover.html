@@ -1,0 +1,126 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <h4 class="skill-hero">
+        <i class="fas fa-file-edit me-2"></i>AI Cover Letter
+    </h4>
+    <small class="fs-6 skill-hero">Create a professional cover letter 
+        tailored to your target job.
+    </small>
+
+    <div class="row g-3 mt-1">
+        <div class="col-md-8">
+            <div class="profile-card bg-light px-3 py-1 rounded-3">
+                <div class="card-body">
+                    <form class="profile-form" method="post" target="_blank">
+                        {% csrf_token %}
+                        <!-- Job Profile -->
+                        <h6 class="skill-hero mb-2 mt-2"><i class="fas fa-briefcase me-2"></i>Job Information</h6>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="fw-medium form-label">Job Title</label>
+                                <input type="text" class="form-control form-control-sm"
+                                placeholder="e.g. Software Developer" name="title">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="fw-medium form-label">Company Name</label>
+                                <input type="text" class="form-control form-control-sm"
+                                placeholder="e.g. Infosys" name="company">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="fw-medium form-label">Reciepent</label>
+                                <input type="text" class="form-control form-control-sm"
+                                placeholder="e.g. HR Manager" name="recipient">
+                            </div>
+                        </div>
+                        <hr>
+                        <!-- Candidate -->
+                        <h6 class="skill-hero mb-2"><i class="fas fa-user me-2"></i>Candidate Profile</h6> 
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="fw-medium form-label">Name</label>
+                                <input type="text" class="form-control form-control-sm"
+                                placeholder="e.g. John Daniel" name="fullname">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="fw-medium form-label">Email</label>
+                                <input type="email" class="form-control form-control-sm"
+                                placeholder="e.g. name@example.com" name="email">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="fw-medium form-label">Phone</label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">+91</span>
+                                    <input type="tel" max="10" class="form-control form-control-sm"
+                                    placeholder="555 123 4567" name="phone">
+                                </div>
+                            </div>
+                        </div> 
+                        <hr>
+                        <!-- Proffessional -->
+                        <h6 class="skill-hero"><i class="fas fa-user-tie me-2"></i>Professional Details</h6>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Skills</label>
+                                <select name="skills" class="form-select form-select-sm skill-select" multiple>
+                                    <option value="">Choose Skills</option>
+                                    {% for tskills in skills %}
+                                    <option value="{{tskills}}">{{tskills}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="fw-medium form-label">Qualification</label>
+                                <input type="text" class="form-control form-control-sm"
+                                placeholder="e.g. B.C.A" name="qualification">
+                            </div>
+                        </div> 
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-sm add-btn fw-medium rounded-3">
+                                <i class="fas fa-wand-magic-sparkles me-2"></i>Generate</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <!-- Quick Insight -->
+            <div class="card skill-card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h6><i class="fas fa-chart-column text-muted me-2"></i> ATS Score</h6>
+                        <span>64%</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <h6><i class="fas fa-square-check text-success me-2"></i> Matched Keywords</h6>
+                        <span>8/10</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <h6><i class="fas fa-brain skill-hero me-2"></i>Matched Skills</h6>
+                        <span>8</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Quick Actions -->
+            <div class="card skill-card">
+                <div class="card-body">
+                    <h6><i class="fas fa-bolt me-1"></i>Quick Actions</h6>
+                    <div class="d-grid gap-2 mt-3">
+                        <a href="#" class="btn btn-sm add-btn mb-2 fw-medium">
+                            <i class="fas fa-microphone me-1"></i>Mock Interview
+                        </a>
+                        <a href="{% url 'skillgap' %}" class="btn btn-sm del-btn mb-2 fw-medium">
+                            <i class="fas fa-chart-line me-1"></i>Skill Gap Analysis
+                        </a>
+                        <a href="{% url 'roadmap' %}" class="btn btn-sm btn-secondary fw-medium">
+                            <i class="fas fa-graduation-cap me-1"></i>View Roadmap
+                        </a>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
+{% endblock %}
