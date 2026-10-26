@@ -1,0 +1,105 @@
+.comp-banner{
+    background-color: #085c58;
+    color: white;
+    padding: 34px;
+    border-radius: 20px;
+}
+.comp-banner h3{
+    font-size: 30px !important;
+}
+.comp-banner p{
+    color: rgb(233, 233, 233) !important;
+}
+.comp-stat-card{
+    border-top: 1px solid #085c58 !important ;
+    border-bottom: 1px solid #085c58 !important ;
+    border-left: 1px solid #085c58 !important ;
+    border-right: 6px solid #085c58 !important ;
+    border-radius: 14px !important;
+    color: #085c58 !important;
+}
+.comp-card{
+    border: 1px solid #085c58 !important;
+}
+.comp-hero{
+    color: #085c58 !important;
+}
+
+/* Candidate Filter */
+.candid-filter label{
+    font-weight: 500 !important;
+}
+.candid-filter input,
+.candid-filter .input-group-text  ,select{
+    border: 1px solid #085c58af !important;
+}
+.candid-filter .input-group-text{
+    background-color: #fff !important;
+}
+.candid-filter input, .candid-filter select{
+    border-left: none !important;
+}
+.candid-filter .form-control:focus,
+.candid-filter .form-select:focus{
+    outline: none !important;
+    box-shadow: none !important;
+}
+.candid-filter-btn{
+    background-color: #085c58 !important;
+    color: #fff !important;
+    height: 30px !important;
+    font-weight: 500 !important;
+}
+.clear-filter-btn{
+    background-color: #646464 !important;
+    color: #fff !important;
+    height: 30px !important;
+    font-weight: 500 !important;
+}
+
+/* Candidate Table */
+.candid-table{
+    margin-bottom: 0 !important;
+}
+
+.candid-table thead td{
+    background-color: #f0f5f5 !important;
+}
+
+/* Pagination */
+.candid-pagination .page-link {
+    color: #085c58;
+    border-color: #dee2e6;
+}
+
+.candid-pagination .page-item.active .page-link {
+    background-color: #085c58;
+    border-color: #085c58;
+    color: #fff;
+}
+
+.candid-pagination .page-link:hover {
+    background-color: #eef5fa;
+    color: #085c58;
+}
+
+.candid-pagination .page-item.disabled .page-link {
+    color: #adb5bd;
+}
+
+.view-btn{
+    background-color: #085c58 !important;
+    color: #fff !important;
+}
+.delete-btn{
+    background-color: #084880 !important;
+    color: #fff !important;
+}
+
+.job-card{
+    border-top: 1px solid #085c58 !important ;
+    border-bottom: 1px solid #085c58 !important ;
+    border-left: 6px solid #085c58 !important ;
+    border-right: 6px solid #085c58 !important ;
+    border-radius: 14px !important;
+}

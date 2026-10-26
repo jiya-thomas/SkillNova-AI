@@ -1,0 +1,111 @@
+/* Hero Banner */
+.hero-banner{
+    background-color: #223561;
+    color: white;
+    padding: 34px;
+    border-radius: 20px;
+}
+
+.hero-banner h3{
+    font-size: 30px !important;
+}
+.hero-banner p{
+    color: rgb(233, 233, 233) !important;
+}
+.hero-badge{
+    background-color: rgba(255, 255, 255, 0.219);
+    padding: 8px 16px;
+    border-radius: 25px;
+}
+.hero-btn{
+    color:#084880 !important;
+}
+.comp-btn{
+    color: #085c58 !important;
+}
+.hero-outline-btn:hover{
+    color: #084880 !important;
+}
+.comp-outline-btn:hover{
+    color: #0A7B76 !important;
+}
+.hero-icon{
+    font-size: 120px;
+    opacity: 0.2;
+}
+
+/* Stat Cards (Jobseeker) */
+.stat-card{
+    border-top: 1px solid #084880 !important ;
+    border-bottom: 1px solid #084880 !important ;
+    border-left: 1px solid #084880 !important ;
+    border-right: 6px solid #084880 !important ;
+    border-radius: 14px !important;
+    color: #084880 !important;
+}
+
+.stat-title{
+    font-size: 18px !important;
+}
+.stat-icon{
+    font-size: 28px;
+    opacity: 0.2;
+}
+.stat-count{
+    font-size: 25px !important;
+}
+
+/* Skill Gap */
+.skill-card, .interview-card, .roadmap-card{
+    border: 1px solid #084880 !important;
+}
+
+.skill-progress {
+    background-color: #0A7B76 !important;
+    width: var(--progress) !important;
+}
+.skill-hero, .interview-hero, .roadmap-hero{
+    color: #084880 !important;
+}
+
+.skill-name{
+    font-weight: 500;
+    color: #0A7B76 !important;
+}
+
+/* Chart Container */
+.chart-container{
+    position: relative;
+    height: 170px;
+    width: 100%;
+}
+.chart-container canvas{
+    max-width: 650px !important;
+}
+
+/* Road Map */
+.roadmap-card{
+    height: 180px !important;
+}
+.status-badge {
+    width: 90px;
+    text-align: center;
+    display: inline-block;
+    padding: 8px 0;
+}
+.complete {
+    background-color: #198754;
+
+}
+.learning {
+    background-color: #0d6efd;
+    color: rgb(250, 250, 250) !important;
+}
+.upcoming {
+    background-color: #fd7e14;
+}
+
+
+
+
+

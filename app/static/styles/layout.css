@@ -1,0 +1,252 @@
+html {
+    scrollbar-width: none !important;
+    overflow-x: hidden !important;
+}
+
+body {
+    background-color: #ececec !important;
+    padding-top: 65px !important;
+}
+
+.btn:focus,
+.btn:active {
+    box-shadow: none !important;
+}
+
+/* Navigation Bar */
+.cust-nav {
+    background-color: #f3f3f3 !important;
+    padding: 12px 20px !important;
+    height: 70px !important;
+    border-bottom: 2px solid #084880 !important;
+    backdrop-filter: blur(10px) !important;
+    position: fixed !important;
+    top: 0;
+    left: 220px;
+    right: 0;
+    z-index: 1000;
+}
+
+.nav-btn {
+    border-radius: 6px !important;
+    background-color: #084880 !important;
+    color: #f8f9fa !important;
+    transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+    transform: translateY(-2px);
+}
+
+.page-title {
+    color: #084880;
+    font-size: 20px;
+}
+
+.search {
+    width: 100% !important;
+    max-width: 420px;
+}
+
+.search input {
+    border-left: none !important;
+}
+
+.search .form-control,
+.search .input-group-text {
+    border-radius: 12px;
+}
+
+.date {
+    color: #575d61;
+    font-size: 17px;
+}
+
+.btn-notification {
+    width: 45px !important;
+    height: 45px !important;
+    border-radius: 12px !important;
+    color: #084880 !important;
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    padding: 3px !important;
+}
+
+.btn-notification:hover {
+    background: #f9fafb !important;
+    border-color: #d1d5db !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+.notification-badge {
+    position: absolute;
+    top: 3px;
+    right: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #e5f3ff;
+    color: #084880 !important;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-btn {
+    color: #084880 !important;
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 10px !important;
+    padding: 6px 10px !important;
+    font-size: 14px !important;
+    transition: all 0.2s ease !important;
+}
+
+.profile-btn:hover {
+    background: #f9fafb !important;
+    border-color: #d1d5db !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+.profile-btn:focus {
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12) !important;
+}
+
+/* Sidebar Menu */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 220px !important;
+    background: #0F172A;
+    border-right: 1px solid #334155;
+    padding: 16px 10px;
+    overflow-y: auto;
+}
+
+.sidebar .nav-item {
+    margin-bottom: 8px;
+}
+
+.sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: 10px;
+    color: #F8FAFC;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.sidebar .nav-link i {
+    color: #93C5FD;
+    width: 25px;
+    margin-right: 12px;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #1E293B;
+    color: white;
+}
+
+.sidebar .nav-link.active{
+    background-color: #2b3b55;
+    color: white;
+}
+
+.main-content {
+    margin-left: 220px;
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+
+.toast-header {
+    background-color: #084880 !important;
+}
+
+.toast-header strong {
+    color: white !important;
+}
+
+
+/* Smaller Screen */
+@media (max-width: 768px) {
+    .cust-nav {
+        left: 0;
+        right: 0;
+        height: 70px !important;
+        z-index: 1000;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -220px;
+        width: 220px;
+        height: 100vh;
+        z-index: 1100;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar.show {
+        left: 0;
+    }
+
+    .search,
+    .date {
+        display: none;
+    }
+}
+
+/* Medium Devices: Tablets / Small Laptops */
+@media (min-width: 769px) and (max-width: 1200px) {
+
+    .sidebar {
+        width: 200px;
+        padding: 14px 8px;
+    }
+
+    .sidebar .nav-link {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+
+    .sidebar .nav-link i {
+        width: 22px;
+        margin-right: 8px;
+    }
+
+    .cust-nav {
+        padding: 10px 14px !important;
+        height: 65px !important;
+    }
+
+    .page-title {
+        font-size: 18px;
+    }
+
+    .search {
+        max-width: 260px;
+        margin-right: 12px !important;
+    }
+
+    .date {
+        display: none;
+    }
+
+    .btn-notification {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .profile-btn {
+        font-size: 14px !important;
+    }
+}

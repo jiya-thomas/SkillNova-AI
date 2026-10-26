@@ -1,0 +1,350 @@
+.profile-tabs{
+    border-bottom: 1px solid #1f4e8c !important;
+}
+.profile-tabs .nav-link{
+    border-bottom: 1px solid #1f438c !important;
+    color: #223561 !important;
+    margin-right: 3px !important;
+    font-weight: 500 !important;
+}
+.profile-tabs .nav-link:hover{
+    background-color: #e8edf7 !important;
+}
+.profile-tabs .nav-link.active{
+    color: #fff !important;
+    background-color: #223561 !important;   
+}
+
+.profile-card{
+    border-top: 1px solid #084880;
+    border-bottom: 1px solid #084880;
+    border-left: 5px solid #084880;
+    border-right: 5px solid #084880;
+    border-radius: 12px;
+}
+.profile-form label{
+    font-weight: 500 !important;
+}
+.profile-form input, input[type="file"],
+.profile-form .input-group-text  ,select{
+    border: 1px solid #084880a1 !important;
+}
+.profile-form textarea{
+    border: 1px solid #084880a1 !important;
+    background-color: #eff5fdaf !important;
+}
+
+/* Tom Select */
+.ts-control input {
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;   
+}
+
+.ts-wrapper{
+    border: 1px solid #084880a1 !important;
+    min-height: 32px !important;  
+    height: 100%;
+}
+
+/* Skill Analysis */
+.skill-card{
+    border: 1px solid #084880 !important;
+}
+.skill-chart{
+    position: relative;
+    height: 150px;
+    width: 100%;
+}
+.career-progress{
+    background-color: #084880 !important;
+    width: var(--progress) !important;
+}
+
+/* Add more */
+.add-btn{
+    background-color: #0A7B76 !important;
+}
+.del-btn{
+    background-color: #084880 !important;
+}
+.assess-btn{
+    height: 28px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+.add-btn, .del-btn{
+    height: 34px !important;
+    color: #fff !important;
+}
+.add-btn:hover{
+    background-color: #075a56 !important;
+}
+
+/* Learning Roadmap */
+.roadmap-progress{
+    background-color: #084880 !important;
+    width: var(--progress) !important; 
+}
+.rmap-card{
+    border-left: 6px solid #084880 !important;
+    border-top: 1px solid #084880 !important;
+    border-right: 1px solid #084880 !important;
+    border-bottom: 1px solid #084880 !important;
+    border-radius: 12px !important;
+    
+}
+.skill-badge{
+    background-color: #f1f1f1 !important;
+    border-radius: 6px !important;
+    color: rgb(32, 32, 32) !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+}
+.module-progress{
+    width: var(--progress);
+}
+.act-badge{
+    border: 1px solid #242424b6 !important;
+    border-radius: 8px !important;
+    color: rgba(32, 32, 32, 0.781) !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+}
+
+/* Job Listing */
+.filter-form label{
+    font-weight: 500 !important;
+}
+.filter-form input,
+.filter-form .input-group-text  ,select{
+    border: 1px solid #084880a1 !important;
+}
+.filter-form .input-group-text{
+    background-color: #fff !important;
+}
+.filter-form input, .filter-form select{
+    border-left: none !important;
+}
+.filter-form .form-control:focus,
+.filter-form .form-select:focus{
+    outline: none !important;
+    box-shadow: none !important;
+}
+.filter-btn{
+    background-color: #084880 !important;
+    color: #fff !important;
+    height: 30px !important;
+}
+.apply-btn{
+    background-color: #0A7B76 !important;
+    color: #fff !important;
+    height: 30px !important;
+}
+.job-badge{
+    background: #E8F5EE !important;
+    color: #198754 !important;
+    border: 1px solid #BFE3CF !important;
+}
+.exp-badge{
+    background: #F1F3F5 !important;
+    color: #495057 !important;
+    border: 1px solid #DEE2E6 !important;
+}
+
+/* Interview */
+.status-card{
+    background-color: #e8fbffcb !important;
+    color: #075a56 !important;
+    border-radius: 12px !important;
+}
+.feat-icon {
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+    background-color: #eaf7fb;
+    color: #075985;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 16px;
+}
+.title{
+    color: #123b5d;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 3px;
+}
+.subtitle{
+    color: #6c757d;
+    font-size: 13px;
+    line-height: 1.4;
+}
+.session-btn{
+    height: 30px !important;
+}
+.qtn-progress{
+    background-color: #084880 !important;
+    width: var(--progress) !important;
+}
+.interview-form textarea{
+    border: 1px solid #084880a1 !important;
+    resize: none !important;
+    border-radius: 12px !important;
+}
+.preview{
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+    transform: scaleX(-1);
+}
+.webcam-container{
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background-color: #000;
+    border-radius: 12px;
+    overflow: hidden;
+}
+.webcam-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+    color: #6c757d;
+    font-size: 40px;
+}
+
+/* Job Modal */
+.job-modal{
+    font-size: 14px;
+}
+.job-modal img{
+    width: 40px !important;
+    height: 40px !important;
+}
+.job-modal .modal-title{
+    font-size: 16px;
+}
+.apply-modal .modal-footer .btn {
+    font-size: 13px;
+}
+
+/* ATS Optimization Engine */
+.ats-card{
+    background: #084880;
+    color: #fff;
+}
+.ats-progress{
+background-color: #bd3f3f !important;
+    width: var(--progress) !important;
+}
+
+/* Job Table */
+.job-table thead td{
+    background-color: #f0f5f5 !important;
+    color: #474747;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+/* Application Status */
+.status-badge{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.status-badge i{
+    font-size: 8px;
+}
+.status-applied{
+    color: #2563EB;
+    background: #EFF6FF;
+}
+.status-shortlisted{
+    color: #7C3AED;
+    background: #F5F3FF;
+}
+.status-interview{
+    color: #EA580C;
+    background: #FFF7ED;
+}
+.status-selected{
+    color: #059669;
+    background: #ECFDF5;
+}
+.status-rejected{
+    color: #DC2626;
+    background: #FEF2F2;
+}
+.status-withdrawn{
+    color: #6B7280;
+    background: #F3F4F6;
+}
+
+/* Work Mode */
+.work-badge{
+    background: #EEF2FF;
+    color: #084880;
+    border: #C7D2FE;
+}
+
+/* AI Score */
+.ai-badge{
+    background: #F3F4F6;
+    color: #0A7B76;
+    border: #E5E7EB;
+}
+.ai-progress{
+    background: #0A7B76; 
+    width: var(--progress) !important;
+}
+
+/* Invitation Badge */
+.interview-badge{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 60px;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: 700;
+}
+.type-badge{
+    background: #EEF2FF;
+    color: #084880;
+    border:#C7D2FE;
+}
+.schedule-badge{
+    background: #DCFCE7 ;
+    color: #15803D;
+    border: 1px solid #BBF7D0;
+    border-radius: 10px;
+    font-size: 12px;
+}
+.schedule-div{
+    background: #f8f5f5;
+    padding: 6px;
+}
+
+.action-btn{
+    background: transparent;
+    color: #6B7280;
+    border: 1px solid #E5E7EB;
+}
+.action-btn:hover {
+    background: #F3F4F6;
+    color: #111827;
+}
+
+

@@ -1,0 +1,101 @@
+html{
+    scrollbar-width: none !important;
+}
+body {
+    background-image: url('../images/bg-image.png');
+    background-size: cover;
+}
+.cust-nav{
+    padding: 20px;
+    background: rgba(207, 207, 207, 0.13);
+    backdrop-filter: blur(10px);
+}
+.logo{
+    height: 68px !important;
+    width:auto;
+}
+.nav-link{
+    color: #084880 !important;
+}
+
+/* Hero Section Header*/
+.hero{
+    margin-top: 20px !important;
+    
+}
+.hero-text{
+    color: #084880;
+}
+.hero-text-1{
+    color: #0A7B76;
+}
+.header{
+    padding-left: 27px !important;
+}
+.register-btn{
+    background-color: #084880 !important;
+    color: aliceblue !important;
+}
+.login-btn{
+    background-color: #0A7B76 !important;
+    color: aliceblue !important;
+}
+.header-badge{
+   background-color: #084880 !important;
+   color: aliceblue !important; 
+}
+.toast-header{
+    background-color: #084880 !important;
+}
+.toast-header strong{
+    color: white !important;
+}
+
+/* Authentication */
+.form-card{
+    background: rgba(255, 255, 255, 0.363) !important;
+    backdrop-filter: blur(16px) !important;
+}
+.hero-logo{
+    width: 49% !important;
+    height: auto !important;   
+}
+.form-card{
+    max-width: 550px !important;
+}
+.form-control, .form-select{
+    height: 39px !important;
+}
+
+/* Feature Section */
+.feat-container{
+    background: rgba(255, 255, 255, 0.699) !important;
+    backdrop-filter: blur(50px) !important;
+}
+.feat-card{
+    border-left: 5px solid #084880 !important;
+    border-top: 1px solid #084880 !important;
+    border-bottom: 1px solid #084880 !important;
+    border-right: 1px solid #084880 !important;
+    background-color: #fffefe94 !important;
+    border-radius: 10px !important;
+    transition: all 0.3s ease;
+}
+.feat-card:hover{
+    transform: translateY(-10px);
+}
+.feat-head{
+    font-size: 22px !important;
+    color: #0A4D8C !important;
+}
+.feat-btn{
+    background-color: #084880 !important;
+}
+
+/* Footer */
+.cust-footer{
+    background-color: #084880;
+    backdrop-filter: blur(34px) !important;
+    color: #fdfdfd;
+}
+
