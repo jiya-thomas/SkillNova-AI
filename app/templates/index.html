@@ -1,0 +1,113 @@
+{% load static %}
+<title>Skill Nova AI</title>
+<link rel="icon" href="{% static 'images/logo.ico' %}">
+<link rel="stylesheet" href="{% static 'styles/main.css' %}">
+<!-- Bootstrap -->
+<link rel="stylesheet" href="{% static 'styles/bootstrap.min.css' %}"> 
+<!-- Font-Awesome -->
+<link rel="stylesheet" href="{% static 'styles/all.min.css' %}"> 
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg cust-nav sticky-top">
+    <div class="container-fluid">
+        <span class="navbar-brand">
+            <img class="logo" src="{% static 'images/header-logo.png' %}" alt="Bootstrap">
+        </span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar">
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link fs-5 fw-semibold me-3 active" href="#home">Home</a>
+                <a class="nav-link fs-5 fw-semibold me-3" href="#about">About</a>
+                <a class="nav-link fs-5 fw-semibold me-3" href="#service">Features</a>
+                <a class="nav-link fs-5 fw-semibold" href="{% url 'login' %}">Login</a>    
+            </div>
+        </div>
+  </div>
+</nav> 
+
+<!-- Hero Section --> 
+<section class="container mb-4 hero mt-5">
+    <span class="badge fs-5 rounded-pill header-badge mb-3">
+      <i class="fas fa-wand-magic-sparkles me-2"></i>AI-Powered Career Development
+    </span>
+    <h4 class="display-5 display-lg-3 fw-bold">
+        <span class="hero-text">Carrer Intelligence &<br>
+        <span class="hero-text-1">Personalized Upskilling<br>
+        <span class="hero-text-1">Ecosystem</span>
+    </h4>
+    <h5 class="mt-3 mb-3 fw-medium fs-6 fs-lg-4">Helping Students Become Industry Ready</h5>
+    <!-- Quick Actions -->
+    <div class="d-flex gap-3 mb-5">
+        <a href="{% url 'register' %}" class="btn btn-lg register-btn px-4 px-lg-5">Getting Started</a>
+        <a href="{% url 'login' %}" class="btn btn-lg login-btn px-4 px-lg-5">Login</a>
+    </div>    
+</section>
+
+<!-- Features -->
+<section class="container-fluid feat-container p-4 text-center">
+    <h3 class="fw-medium">Core Features</h3>
+    <span class="text-muted text-center fs-5"> AI-powered tools designed to accelerate 
+    your career journey.</span> 
+
+    <!-- Feature Cards -->
+    <div class="row justify-content-center">
+        <!-- Card-1 -->
+        <div class="col-md-3 mt-4">
+            <div class="card feat-card p-3">
+                <h4 class="hero-text-1 feat-head fw-medium">
+                    <i class="fas fa-bullseye me-2"></i>Skill Gap Analysis</h4>
+                <span class="pb-3">Identify missing roles for target roles</span>
+                <button class="btn btn-sm feat-btn text-light rounded-3">
+                    <i class="fas fa-circle-arrow-right me-2"></i>Explore More</button>
+            </div>
+        </div>
+        <!-- Card-2 -->
+        <div class="col-md-3 mt-4">
+            <div class="card feat-card p-3">
+                <h4 class=" feat-head fw-medium">
+                    <i class="fas fa-brain me-2"></i>Learning Roadmaps</h4>
+                <span class="pb-3">Dynamic AI-Generated learning Path</span>
+                <button class="btn btn-sm feat-btn text-light rounded-3">
+                    <i class="fas fa-circle-arrow-right me-2"></i>Explore More
+                </button>
+            </div>
+        </div> 
+        <!-- Card-3 -->
+        <div class="col-md-3 mt-4">
+            <div class="card feat-card p-3">
+                <h4 class=" feat-head fw-medium">
+                    <i class="fas fa-file-lines me-2"></i>Resume Optimizer</h4>
+                <span class="pb-3">AI-Powered Resume Analysis</span>
+                <button class="btn btn-sm feat-btn text-light rounded-3">
+                    <i class="fas fa-circle-arrow-right me-2"></i>Explore More
+                </button>
+            </div>
+        </div>  
+        <!-- Card 4 -->
+        <div class="col-md-3 mt-4">
+            <div class="card feat-card p-3">
+                <h4 class=" feat-head fw-medium">
+                    <i class="fas fa-microphone me-2"></i>Mock Interview</h4>
+                <span class="pb-3">Practice Interviews with AI-feeback</span>
+                <button class="btn btn-sm feat-btn text-light rounded-3">
+                    <i class="fas fa-circle-arrow-right me-2"></i>Explore More
+                </button>
+            </div>
+        </div>  
+    </div> 
+</section>
+
+<!-- Footer -->
+<footer class="footer cust-footer py-2">
+    <div class="container text-center">
+        <p class="mb-0">
+            © {% now "Y" %} <strong>SkillNova AI</strong>.
+            All Rights Reserved.
+        </p>
+    </div>
+</footer> 
+
+<!-- Script -->
+<script src="{% static 'scripts/bootstrap.bundle.min.js' %}"></script> 

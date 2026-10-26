@@ -1,0 +1,114 @@
+{% load static %}
+<title>{% block title %}Skill Nova AI{% endblock %}</title>
+<link rel="icon" href="{% static 'images/logo.ico' %}">
+<!-- Bootstrap -->
+<link rel="stylesheet" href="{% static 'styles/bootstrap.min.css' %}">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="{% static 'styles/all.min.css' %}"> 
+<!-- Tom Select -->
+<link rel="stylesheet" href="{% static 'styles/tom-select.bootstrap5.min.css' %}"> 
+<!-- CSS Styles  -->
+<link rel="stylesheet" href="{% static 'styles/layout.css' %}">
+<link rel="stylesheet" href="{% static 'styles/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'styles/student.css' %}">
+<link rel="stylesheet" href="{% static 'styles/recruiter.css' %}">
+
+<!-- Navbar -->
+<div class="row d-flex justify-content-around">
+    <div class="col-md-2">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar">
+            <ul class="nav flex-column">
+                <img class="img-fluid mb-4" src="{% static 'images/header.png' %}">
+                {% for url_name, title, icon, active_urls in menu %}
+                <li class="nav-item">
+                    <a href="{% url url_name %}"
+                    class="nav-link 
+                    {% if request.resolver_match.url_name in active_urls %}active{% endif %}" >    
+                        <i class="fas {{ icon }} me-2"></i><span>{{ title }}</span>
+                    </a>   
+                </li>
+                {% endfor %}
+            </ul>
+        </aside> 
+    </div>
+    <div class="col-md-10 main-content">
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-expand-lg cust-nav">
+            <button class="btn nav-btn me-3" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="page-title me-3">
+                <h5 class="mb-0 fw-bold">DASHBOARD</h5>
+                
+            </div>
+            <!-- Search Bar -->
+            <div class="search me-auto">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input type="text" class="form-control" 
+                        placeholder="Search Course, Skills, Jobs...">
+                </div>
+            </div> 
+            <!-- Date Container -->
+            <div class="date me-4">
+                <i class="fas fa-calendar-alt me-2"></i>
+                <span>{% now "l, F j, Y" %}</span>
+            </div>
+            <!-- Notification -->
+            <div class="dropdown me-2">
+                <button class="btn btn-light btn-notification position-relative"
+                data-bs-toggle="dropdown">
+                    <i class="fas fa-bell"></i> 
+                    <span class="notification-badge">14</span>   
+                </button>
+            </div>
+            
+            <!-- Profile Drodown -->
+            <div class="dropdown">
+                <button class="btn profile-btn rounded-4 d-flex align-items-center 
+                px-2" data-bs-toggle="dropdown">
+                    <i class="fas fa-user fs-4"></i>
+                    <div class="text-start ms-2 d-none d-lg-block">
+                        <div class="fw-semibold">{{ request.session.name }}</div>
+                        <small class="text-muted">{{ request.session.role|title }}</small>
+                    </div>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow">
+                    {% if request.session.role == 'jobseeker' %}
+                    <li><a class="dropdown-item" href="{% url 'profile' %}">
+                        <i class="fas fa-user-circle me-2"></i>My Account</a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    {% endif %}
+                    <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">
+                        <i class="fas fa-right-from-bracket me-2"></i>Logout</a>
+                    </li>
+                </ul>
+            </div> 
+        </nav>
+        {% if messages %}
+        <div class="toast-container top-0 end-0">
+            {% for message in messages %}
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <img class="me-2" src="{% static 'images/logo.ico' %}" width="24px" alt="logo">
+                    <strong class="me-auto hero-text">SkillNova AI</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                </div>
+                <div class="toast-body fw-medium">{{message}}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+    </div>
+</div> 
+
+<script src="{% static 'scripts/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'scripts/validate.js' %}"></script>
+<script src="{% static 'scripts/chart.umd.min.js' %}"></script>
+<script src="{% static 'scripts/tom-select.complete.min.js' %}"></script>
+<script src="{% static 'scripts/main.js' %}"></script>
+
