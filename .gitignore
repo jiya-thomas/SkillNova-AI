@@ -15,10 +15,6 @@ staticfiles/
 media/*
 !media/.gitkeep
 
-# Large GGUF models
-models/*.gguf
-models/**/*.gguf
-
 # Test artifacts
 .pytest_cache/
 .coverage
