@@ -4,7 +4,7 @@ from pathlib import Path
 from .questions import generate_questions
 
 from django.conf import settings
-from llama_cpp import llama
+from llama_cpp import Llama
 
 
 def clean_text(text):
@@ -74,7 +74,7 @@ def miniml_score(answer, keywords):
     similarity = cosine_similarity(answer_embedding, keyword_embedding)
     similarity = max(0.0, min(1.0, similarity))
 
-    similarity_percentage = rounf(similarity*100)
+    similarity_percentage = round(similarity*100)
     threshold = float(
         getattr(settings,'ATS_SEMANTIC_THRESHOLD',0.55)
     )
