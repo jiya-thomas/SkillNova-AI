@@ -1,0 +1,246 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <h4 class="skill-hero">
+        <i class="fas fa-chart-line me-2"></i>Skill Gap Analysis
+    </h4>
+    <small class="fs-6 skill-hero">Identify gap between current skills
+        and required skills to the target role
+    </small>
+
+    <div class="row g-3 mb-3">
+        <!-- Resume Analysis -->
+        <div class="col-md-8">
+            <div class="card skill-card mt-4">
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium mb-2 ">
+                                    <i class="fas fa-user-tie me-1"></i>Target Role</label>
+                                <select name="target_role" class="form-select form-select-sm rounded-3">
+                                    <option selected disabled>Choose Job Role</option>
+                                    {% for role, val in roles %}
+                                    <option value="{{val}}">{{role}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label fw-medium mb-2">
+                                    <i class="fas fa-file-lines me-1"></i>Upload Resume</label>
+                                <input type="file" name="resume" accept=".pdf"
+                                    class="form-control form-control-sm rounded-3">   
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-2">
+                            <button class="btn btn-sm add-btn fw-medium me-2">
+                                <i class="fas fa-pie-chart me-2"></i>Analyze Skills</button>
+                            {% if compare %}
+                            <a href="{% url 'roadmap' %}" class="btn btn-sm del-btn assess-btn fw-medium">
+                                <i class="fas fa-graduation-cap me-2"></i>Roadmap
+                            </a>
+                            {% endif %}    
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Quick Insight -->
+        <div class="col-md-4">
+            <div class="card skill-card mt-4">
+                <div class="card-body skill-hero">
+                    <h6 class="mb-3"><i class="fas fa-lightbulb me-1"></i>Quick Insight</h6>
+                    <p class="mb-4">SkillNova AI analyze your resume against your target role.
+                        Discover the skills you need to improve.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-3">
+        <!-- Skill Overview -->
+        <div class="col-md-5">
+            <div class="card skill-card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between  mb-4">
+                        <h6 class="fw-semibold mb-0">Skill Overview</h6>
+                        <span class="badge rounded-pill bg-success">{{total}} Analyzed</span>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-4 border-end">
+                            <div class="small text-muted fw-semibold mb-2">MATCHED</div>
+                            <div class="fs-2 fw-bold text-success">{{matched}}</div>
+                            <small class="text-muted">Skills</small>
+                        </div>
+                        <div class="col-4 border-end">
+                            <div class="small text-muted fw-semibold mb-2">IMPROVING</div>
+                            <div class="fs-2 fw-bold text-warning">{{improving}}</div>
+                            <small class="text-muted">Skills</small>
+                        </div>
+                        <div class="col-4 border-end">
+                            <div class="small text-muted fw-semibold mb-2">MISSING</div>
+                            <div class="fs-2 fw-bold text-danger">{{missing}}</div>
+                            <small class="text-muted">Skills</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Skill Match Score -->
+        <div class="col-md-3">
+            <div class="card skill-card">
+                <div class="card-body">
+                    <h6>Overall Match</h6>
+                    <div class="skill-chart">
+                        <canvas id="skillgap" data-score="{{score}}"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Career Insight -->
+        <div class="col-md-4">
+            <div class="card skill-card h-100">
+                <div class="card-body">
+                    <h6 class="fw-semibold mb-3">
+                        <i class="fas fa-bullseye me-2"></i>Career Insight
+                    </h6>
+
+                    <!-- Target Role -->
+                    <div class="mb-3">
+                        <small class="text-muted">TARGET ROLE</small><br>
+                        {% if selected_role %}
+                            {% if selected_role == 'python' %}
+                                <span class="fw-semibold">Python Developer</span>
+                            {% elif selected_role == 'react' %}
+                                <span class="fw-semibold">React Developer</span> 
+                            {% elif selected_role == 'laravel' %}
+                                <span class="fw-semibold">Laravel Developer</span>  
+                            {% elif selected_role == 'flutter' %}
+                                <span class="fw-semibold">Flutter Developer</span> 
+                            {% elif selected_role == 'data' %}
+                                <span class="fw-semibold">Data Analyst</span>   
+                            {% endif %}
+                        {% else %}
+                            <span class="fw-semibold text-muted">Not Selected</span>               
+                        {% endif %}           
+                    </div>
+                    <!-- Career Readiness -->
+                    <div>
+                        <small class="text-muted d-block">CAREER READINESS</small>
+                        <div class="d-flex align-items-center">
+                            <span class="fs-6 fw-bold skill-hero">{{score}}%</span>
+                        </div>
+                        <div class="progress mt-2">
+                            <div class="progress-bar career-progress" style="--progress: {{score}}%"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <!-- Skill Comparison -->
+        <div class="col-md-8">
+            <div class="card skill-card h-100">
+                <div class="card-body table-responsive">
+                    <h6><i class="fas fa-chart-column me-1"></i>Skill Comparison</h6>
+                    {% if compare %}
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <th>Skill</th> <th>Required</th> <th>Current</th> 
+                            <th>Gap %</th> <th>Confidence</th> <th>Status</th>
+                        </thead>
+                        <tbody>
+                            {% for item in compare %}
+                            <tr>
+                                <td>{{item.name}}</td>
+                                <td class="fw-medium">{{item.required}}</td>
+                                <td class="fw-medium">{{item.current}}</td>
+                                <td>
+                                    {% if item.gap == 0 %}
+                                    <span class="fw-semibold text-success">0%</span>
+                                    {% elif item.gap <= 40 %}
+                                    <span class="fw-semibold text-secondary-emphasis">{{item.gap}}%</span>
+                                    {% else %}
+                                    <span class="fw-semibold text-danger">{{item.gap}}%</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if item.confidence >= 80 %}
+                                    <span class="fw-semibold text-success">{{item.confidence}}%
+                                    </span>
+                                    {% elif item.confidence >= 50 %}
+                                    <span class="fw-semibold text-warning">{{item.confidence}}%
+                                    </span>
+                                    {% else %}
+                                    <span class="fw-semibold text-danger">{{item.confidence}}%
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if item.status == "matched" %}
+                                    <span class="badge rounded-pill bg-success-subtle text-success-emphasis">
+                                        Matching
+                                    </span>
+                                    {% elif item.status == "improving" %}
+                                    <span class="badge rounded-pill bg-secondary-subtle text-secondary-emphasis">
+                                        Improving
+                                    </span>
+                                    {% elif item.status == "missing" %}
+                                    <span class="badge rounded-pill bg-danger-subtle text-danger-emphasis">
+                                        Missing
+                                    </span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <div class="text-center py-5">
+                            <i class="fas fa-file-circle-question
+                                fs-1 text-muted mb-3"></i>
+                            <h6 class="text-muted">No Skill Analysis Available</h6>
+                            <p class="small text-muted mb-0">
+                                Select a target role and upload
+                                your PDF resume to begin analysis.
+                            </p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!-- Quick Cards -->
+        <div class="col-md-4">
+            <div class="card skill-card h-100">
+                <div class="card-body">
+                    <h6 class="mb-4">
+                        <i class="fa-solid fa-bolt me-2"></i>Quick Actions
+                    </h6>
+                    <div class="d-grid gap-3">
+                        <a href="#" class="btn btn-sm del-btn text-center fw-medium mb-1">
+                            <i class="fa-solid fa-map me-2"></i>Learning Roadmap
+                            <i class="fa-solid fa-arrow-right float-end mt-1"></i>
+                        </a>
+                        <a href="#" class="btn btn-sm add-btn text-center fw-medium mb-1">
+                            <i class="fa-solid fa-code me-2"></i>Practice Skills
+                            <i class="fa-solid fa-arrow-right float-end mt-1"></i>
+                        </a>
+                        <a href="#" class="btn btn-sm btn-secondary text-center fw-medium">
+                            <i class="fa-solid fa-file-pen me-2"></i>Improve Resume
+                            <i class="fa-solid fa-arrow-right float-end mt-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+
+</div>
+{% endblock %}
+

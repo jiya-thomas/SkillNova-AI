@@ -1,0 +1,188 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+
+{% block content %}
+<section class="container-fluid p-4">
+    <h4 class="skill-hero">
+        <i class="fas fa-graduation-cap me-2"></i>Learning Roadmap
+    </h4>
+    <small class="fs-6 skill-hero">
+        Your Personalized Learning & Career Development Roadmap
+    </small>
+
+    <!-- Roadmap Overview -->
+    <div class="card skill-card mt-4 mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-lg-3 border-end">
+                    <small class="text-muted">
+                        <i class="fas fa-briefcase me-1"></i>Target Role</small>
+                    <h6 class="fw-semibold skill-hero mt-1">{{roadmap.role|default:'--'}}</h6>
+                </div>
+                <div class="col-lg-3 border-end">
+                    <small class="text-muted">
+                        <i class="fas fa-calendar-alt me-1"></i>Roadmap Duration</small>
+                    <h6 class="fw-semibold skill-hero mt-1">{{roadmap.duration|default:'--'}}</h6>    
+                </div>
+                <div class="col-lg-3 border-end">
+                    <small class="text-muted">
+                        <i class="fas fa-clock me-1"></i>Estimated Effort</small>
+                    <h6 class="fw-semibold skill-hero mt-1">{{roadmap.effort|default:'--'}}</h6>    
+                </div>
+                <div class="col-md-3">
+                    <small class="text-muted">
+                        <i class="fas fa-chart-simple me-1"></i>Overall Progress</small>
+                    <div class="d-flex justify-content-end ">
+                        <span class="fw-semibold skill-hero">{{ roadmap.progress }}%</span>
+                    </div>
+                    <div class="progress" style="height: 8px;" role="progressbar">
+                        <div class="progress-bar roadmap-progress" style="--progress: {{roadmap.progress}}%"></div>
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Roadmap Schedule -->
+    <div class="row g-3">
+        {% if roadmap %} 
+        <div class="col-lg-9 h-100">
+            {% for phase in roadmap.phases %} 
+            <div class="card rmap-card mb-3">
+                <div class="card-body">
+                    <!-- Module Overview -->
+                    <div class="d-flex justify-content-between mb-1">
+                        <h6 class="fw-medium">
+                            <span class="fw-bold me-2">Phase {{phase.number}}:</span>{{phase.title}}
+                            <span class="ms-1 badge bg-{{phase.color}} p-2">{{phase.status}}</span>
+                        </h6>   
+                        <div class="d-flex align-items-center">
+                            <span class="fw-semibold me-2">{{phase.progressed}}%</span>
+                            <div class="progress" style="width: 90px; height: 7px;" role="progressbar">
+                                <div class="progress-bar module-progress bg-success" style=" --progress: {{phase.progressed}}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Skills -->
+                    <div class="d-flex">
+                        {% for skill in phase.skills %}
+                        <span class="badge skill-badge me-2">{{skill}}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="mt-3 mb-3 d-flex justify-content-between">
+                        <div class="d-flex">
+                            <span class="badge act-badge me-2"><i class="fas fa-book me-1"></i>Courses</span>
+                            <span class="badge act-badge me-2"><i class="fas fa-code me-1"></i>Practice</span>
+                        </div>
+                        <button class="btn btn-sm px-3 btn-success fw-medium rounded-2" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#activity-{{ phase.number }}">
+                            <i class="fas fa-eye me-1"></i>View
+                        </button>
+                    </div>
+                    <div class="collapse" id="activity-{{phase.number}}">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class="fw-medium">
+                                    <td>Activity</td> <td>Type</td>
+                                    <td>Status</td> <td>Action</td>
+                                </thead>
+                                <tbody class="justify-content-center">
+                                    {% for name, type, status in phase.activity %}
+                                    <tr>
+                                        <td>{{name}}</td>
+                                        <td>
+                                            <div class="badge bg-primary-subtle text-primary-emphasis p-2 px-3">
+                                                {{type}}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {% if status == "Complete" %}
+                                            <div class="text-success fw-medium">Completed</div>
+                                            {% elif status == "Learning" %}
+                                            <div class="text-primary fw-medium">Learning</div>
+                                            {% elif status == "Planned" %}
+                                            <div class="text-danger fw-medium">Not Started</div>
+                                            {% endif %}
+                                        </td>
+                                        <td><a class="btn btn-secondary btn-sm assess-btn px-2 fw-medium">
+                                        <i class="fas fa-clipboard-list me-1"></i>Review</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+           </div> 
+           {% endfor %}   
+        </div>
+        {% else %}
+        <div class="col-lg-9">
+            <div class="card skill-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-graduation-cap fs-1 text-muted mb-3"></i>
+                    <h6 class="text-muted">No Learning Roadmap Available</h6>
+                    <p class="small text-muted mb-4">
+                        Complete Skill Gap Analysis first to generate
+                        your personalized learning roadmap.
+                    </p>
+                    <a href="{% url 'skillgap' %}" class="btn btn-sm add-btn fw-medium">
+                        <i class="fas fa-chart-line me-2"></i>Analyze Skills
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class="col-lg-3">
+            <!-- Quick Actions -->
+            <div class="card skill-card mb-3">
+                <div class="card-body">
+                    <h6 class="fw-semibold mb-3">
+                        <i class="fas fa-bolt me-2"></i>Quick Actions
+                    </h6>
+                    <div class="d-grid gap-2">
+                        <a href="#" class="btn btn-sm add-btn mb-1 fw-medium">
+                            <i class="fas fa-play me-1"></i>Continue Learning
+                        </a>
+                        <a href="#" class="btn btn-sm del-btn mb-1 fw-medium">
+                            <i class="fas fa-clipboard-check me-1"></i>Take Assessment
+                        </a>
+                        <a href="#" class="btn btn-sm btn-secondary fw-medium">
+                            <i class="fas fa-map me-1"></i>View Roadmap
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- Tool Tips -->
+            <div class="card skill-card mb-3">
+                <div class="card-body">
+                    <h6 class="fw-semibold mb-3 skill-hero">
+                        <i class="fas fa-lightbulb me-2"></i>Tips
+                    </h6>
+                    <p class="skill-hero small mb-0">
+                        <strong>Stay Consistent:</strong>
+                        Small, regular progress leads to better results.
+                    </p>
+                    <p class="skill-hero small mt-2 mb-0">
+                        <strong>Track Your Progress:</strong>
+                        Review your dashboard and complete pending activities.
+                    </p>
+                </div>
+            </div> 
+            <!-- Help Desk -->
+            <div class="card skill-card">
+                <div class="card-body">
+                    <h6 class="fw-semibold mb-2">Need Help?</h6>
+                    <p class="text-muted">Book a session with mentor to get Guidance</p>
+                    <div class="d-grid">
+                        <button class="btn btn-sm btn-secondary fw-medium">
+                            <i class="fas fa-user me-2"></i>Book Mentorship</button>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div> 
+</section>
+{% endblock %}
+
