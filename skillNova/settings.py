@@ -174,7 +174,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AI_MODELS_DIR = BASE_DIR/"models"
 
 MINILM_MODEL_PATH=(
-    AI_MODELS_DIR / "ALL-MiniLM-L6-V2-Q8.gguf"
+    AI_MODELS_DIR / "all-MiniLM-L6-V2-Q8.gguf"
 )
 LLM_MODEL_PATH=(
     AI_MODELS_DIR / "gemma-3-1B-IT-Q4-K_M.gguf"
