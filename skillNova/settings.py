@@ -41,7 +41,13 @@ ALLOWED_HOSTS = [
 
 render_hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if render_hostname:
-    ALLOWED_HOSTS.append("RENDER_EXTERNAL_HOSTNAME")
+    ALLOWED_HOSTS.append(render_hostname)
+
+CSRF_TRUSTED_ORIGINS = (
+    [f"https://{render_hostname}"]
+    if render_hostname
+    else []
+)   
 
 
 # Application definition
@@ -141,8 +147,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS=[BASE_DIR/'static']
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR/"staticfiles"
 
 STORAGES={
