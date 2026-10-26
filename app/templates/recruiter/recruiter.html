@@ -1,0 +1,219 @@
+{% extends 'layout.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'styles/dashboard.css' %}">
+
+{% block content %}
+<div class="container-fluid p-4">
+    <!-- Welcome Banner -->
+    <div class="comp-banner mb-3 shadow-sm">
+        <div class="row align-items-center">
+            <div class="col-md-10">
+                <span class="hero-badge"><i class="fas fa-rocket me-2"></i>Recruiter Intelligence Portal</span>
+                <h3 class="mt-3 fw-bold">Welcome Back, {{ request.session.name }} 👋</h3>
+                <p class="text-light">Discover verified talent based on project outcomes, run automated AI screening, and schedule direct interviews.</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{% url 'candidate' %}" class="btn btn-light comp-btn fw-medium">
+                        <i class="fas fa-search me-1"></i>Verified Skill Search
+                    </a>
+                    <a href="{% url 'postJob' %}" class="btn btn-outline-light fw-medium comp-outline-btn">
+                        <i class="fas fa-plus me-1"></i>Post New Job
+                    </a>
+                    <a href="{% url 'screening' %}" class="btn btn-warning fw-medium text-dark">
+                        <i class="fas fa-bullseye me-1"></i>Automated AI Screening
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-2 text-center">
+                <i class="fas fa-building-user hero-icon"></i>
+            </div>
+        </div>
+    </div> 
+
+    <!-- Stat cards -->
+    <div class="row g-3 align-items-center mb-4">
+        <!-- Candidate Stats -->
+        <div class="col-md-3">
+            <div class="card comp-stat-card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="stat-title">Talent Pool</h6>
+                        <span class="stat-icon"><i class="fas fa-users"></i></span>
+                    </div>
+                    <div class="stat-count fw-bold">{{ total_candidates }}</div>
+                    <small class="text-muted"><a href="{% url 'candidate' %}" class="text-decoration-none">Search Candidates &rarr;</a></small>
+                </div>
+            </div>
+        </div> 
+        <!-- Job Stats -->
+        <div class="col-md-3">
+            <div class="card comp-stat-card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="stat-title">Active Job Openings</h6>
+                        <span class="stat-icon"><i class="fas fa-briefcase"></i></span>
+                    </div>
+                    <div class="stat-count fw-bold">{{ active_jobs_count }}</div>
+                    <small class="text-muted"><a href="{% url 'listing' %}" class="text-decoration-none">Manage Listings &rarr;</a></small>
+                </div>
+            </div>
+        </div>  
+        <!-- Application Stats -->
+        <div class="col-md-3">
+            <div class="card comp-stat-card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="stat-title">Total Applications</h6>
+                        <span class="stat-icon"><i class="fas fa-clipboard-list"></i></span>
+                    </div>
+                    <div class="stat-count fw-bold">{{ total_applications }}</div>
+                    <small class="text-muted"><a href="{% url 'applications' %}" class="text-decoration-none">View Pipeline &rarr;</a></small>
+                </div>
+            </div>
+        </div> 
+        <!-- Shortlist Stats -->
+        <div class="col-md-3">
+            <div class="card comp-stat-card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="stat-title">Shortlisted</h6>
+                        <span class="stat-icon"><i class="fas fa-star text-warning"></i></span>
+                    </div>
+                    <div class="stat-count fw-bold">{{ shortlisted_count }}</div>
+                    <small class="text-success fw-medium"><a href="{% url 'applications' %}?status=shortlisted" class="text-decoration-none text-success">Review Shortlist &rarr;</a></small>
+                </div>
+            </div>
+        </div> 
+    </div>
+
+    <div class="row g-3 align-items-center mb-4">
+        <!-- AI-Match Overview -->
+        <div class="col-md-6">
+            <div class="card comp-card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="comp-hero mb-3">
+                        <i class="fas fa-bullseye me-2"></i>AI Candidate Skill Density
+                    </h6>
+                    <div class="chart-container mb-3" style="position: relative; height: 210px;">
+                        <canvas class="chart-canvas" id="aimatch"></canvas>
+                    </div>
+                </div>
+                {{ ai_match|json_script:"ai_match_data" }}
+            </div>
+        </div>
+
+        <!-- Recent Applicant Pipeline -->
+        <div class="col-md-6">
+            <div class="card comp-card shadow-sm h-100">
+                <div class="card-body table-responsive">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="comp-hero mb-0">
+                            <i class="fas fa-users me-2"></i>Recent Applicants & AI Scores
+                        </h6>
+                        <a href="{% url 'screening' %}" class="small text-decoration-none fw-semibold">AI Screening &rarr;</a>
+                    </div>
+                    <table class="table table-sm table-hover align-middle">
+                        <thead>
+                            <tr class="small text-muted text-uppercase">
+                                <th>Candidate</th>
+                                <th>Job Applied</th>
+                                <th>AI Match</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for app in recent_applications %}
+                            <tr>
+                                <td>
+                                    <strong class="d-block text-dark">{{ app.candidate.name }}</strong>
+                                    <small class="text-muted">{{ app.candidate.email }}</small>
+                                </td>
+                                <td>
+                                    <span class="small fw-semibold">{{ app.job.title }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge {% if app.ai_suitability_score >= 80 %}bg-success{% elif app.ai_suitability_score >= 60 %}bg-primary{% else %}bg-warning text-dark{% endif %} px-2 py-1 rounded-pill">
+                                        {{ app.ai_suitability_score }}%
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark border small text-capitalize">{{ app.status|title }}</span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-muted small">
+                                    No applications received yet. Post a job or run AI candidate screening!
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div> 
+    </div>
+
+    <!-- Quick Tools -->
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card comp-card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="comp-hero mb-3">
+                        <i class="fas fa-bolt me-2"></i>Hiring Workflows
+                    </h6>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'postJob' %}" class="btn btn-sm btn-outline-primary fw-medium text-start p-2">
+                            <i class="fas fa-plus me-2"></i>Publish New Job Posting
+                        </a>
+                        <a href="{% url 'screening' %}" class="btn btn-sm btn-outline-success fw-medium text-start p-2">
+                            <i class="fas fa-filter me-2"></i>Automated AI Applicant Screening
+                        </a>
+                        <a href="{% url 'candidate' %}" class="btn btn-sm btn-outline-secondary fw-medium text-start p-2">
+                            <i class="fas fa-magnifying-glass me-2"></i>Verified Skill Candidate Search
+                        </a>
+                        <a href="{% url 'interviews' %}" class="btn btn-sm btn-outline-info fw-medium text-start p-2">
+                            <i class="fas fa-calendar-check me-2"></i>Schedule & Manage Interviews
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card comp-card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="comp-hero mb-3">
+                        <i class="fas fa-medal me-2"></i>Verified Skill Search Advantage
+                    </h6>
+                    <p class="small text-muted mb-2">SkillNova AI eliminates resume embellishment by validating candidate coding projects directly against AI rubric benchmarks.</p>
+                    <div class="p-2 bg-light-subtle rounded border small">
+                        <i class="fas fa-check-circle text-success me-1"></i> Look for candidates with <strong>Verified Skill Badges</strong> in your search for 2.4x higher hiring predictability.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card comp-card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="comp-hero mb-3">
+                        <i class="fas fa-briefcase me-2"></i>Recruiter Portal Summary
+                    </h6>
+                    <div class="d-flex justify-content-between mb-2 pb-1 border-bottom small">
+                        <span class="text-muted">Organization</span>
+                        <strong class="text-dark">{{ user.name }}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 pb-1 border-bottom small">
+                        <span class="text-muted">Contact Email</span>
+                        <strong class="text-dark">{{ user.email }}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between small">
+                        <span class="text-muted">Active Listings</span>
+                        <span class="badge bg-success-subtle text-success">{{ active_jobs_count }} Active</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
