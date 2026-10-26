@@ -1,0 +1,195 @@
+{% extends 'layout.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'styles/dashboard.css' %}">
+
+{% block content %}
+<div class="container-fluid p-4">
+    <!-- Welcome Banner -->
+    <div class="hero-banner mb-3">
+        <div class="row align-items-center">
+            <div class="col-md-10">
+                <span class="hero-badge"><i class="fas fa-rocket me-2"></i>Skill Nova AI Ecosystem</span>
+                <h3 class="mt-3 fw-bold">Welcome Back, {{ request.session.name }} 👋</h3>
+                <p class="text-light">Advance your verified skill credentials, optimize your ATS resume, and connect with top recruiters.</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{% url 'roadmap' %}" class="btn btn-light hero-btn fw-medium">
+                        <i class="fas fa-graduation-cap me-1"></i>Dynamic Roadmap
+                    </a>
+                    <a href="{% url 'ats_resume' %}" class="btn btn-outline-light fw-medium hero-outline-btn">
+                        <i class="fas fa-file-shield me-1"></i>ATS Optimizer
+                    </a>
+                    <a href="{% url 'project_verify' %}" class="btn btn-outline-light fw-medium hero-outline-btn">
+                        <i class="fas fa-medal me-1"></i>Verify Projects
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-2 text-center">
+                <i class="fas fa-user-graduate hero-icon"></i>
+            </div>
+        </div>
+    </div> 
+
+    <!-- Stat Cards -->
+    <div class="row g-3 align-items-center mb-4">
+        <!-- Stat Card-1 -->
+        <div class="col-md-3">
+            <div class="card stat-card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="stat-title">Total Projects</h6>
+                        <span class="stat-icon"><i class="fas fa-computer"></i></span>
+                    </div>
+                    <div class="stat-count fw-bold">{{ total_projects }}</div>
+                    <small class="text-muted"><i class="fas fa-code-branch me-1"></i>In Portfolio</small>
+                </div>
+            </div>
+        </div>
+        <!-- Stat Card-2 -->
+        <div class="col-md-3">
+            <div class="card stat-card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="stat-title">Verified Badges</h6>
+                        <span class="stat-icon"><i class="fas fa-medal"></i></span>
+                    </div>
+                    <div class="stat-count fw-bold">{{ verified_badges_count }}</div>
+                    <small class="text-success fw-medium me-2"><i class="fas fa-circle-check me-1"></i>AI Verified</small>
+                    <a href="{% url 'skillbadge' %}" class="small text-decoration-none text-muted">
+                        View Badges &rarr;</a>
+                </div>
+            </div>
+        </div>
+        <!-- Stat Card-3 -->
+        <div class="col-md-3">
+            <div class="card stat-card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="stat-title">ATS Resume Score</h6>
+                        <span class="stat-icon"><i class="fas fa-file-lines text-primary"></i></span>
+                    </div>
+                    <div class="stat-count fw-bold">{{ ats_score }}%</div>
+                    <small class="text-muted"><i class="fas fa-shield-halved me-1"></i>ATS Match Ready</small>
+                </div>
+            </div>
+        </div> 
+        <!-- Stat Card-4 -->
+        <div class="col-md-3">
+            <div class="card stat-card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="stat-title">Job Applications</h6>
+                        <span class="stat-icon"><i class="fas fa-paper-plane"></i></span>
+                    </div>
+                    <div class="stat-count fw-bold">{{ total_applications }}</div>
+                    <small class="text-muted">
+                        <a href="{% url 'applied' %}" class="text-decoration-none text-muted">Track Status &rarr;</a>
+                    </small>
+                </div>
+            </div>
+        </div> 
+    </div> 
+
+    <div class="row g-3 align-items-center mb-4">
+        <!-- Skill-Gap Analysis -->
+        <div class="col-md-6">
+            <div class="card skill-card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="skill-hero mb-0">
+                            <i class="fas fa-chart-line me-2"></i>Skill Gap Overview
+                        </h6>
+                        <a href="{% url 'skillgap' %}" class="btn btn-sm assess-btn btn-secondary fw-medium">
+                            Analyze Gap &rarr;</a>
+                    </div>
+                    {% for name, value in skill %}    
+                    <div class="d-flex justify-content-between skill-name mb-1">
+                        <span>{{name}}</span>
+                        <span class="fw-semibold">{{value}}%</span>   
+                    </div>
+                    <div class="progress mb-3" style="height: 8px;">
+                        <div class="progress-bar skill-progress" style="--progress: {{value}}%;"></div>
+                    </div>
+                    {% endfor %} 
+                </div>
+            </div>
+        </div>
+        <!-- Interview Performance -->
+        <div class="col-md-6">
+            <div class="card interview-card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="interview-hero mb-0">
+                            <i class="fas fa-microphone me-2"></i>Interview Readiness
+                        </h6>
+                        <a href="{% url 'interview' %}" class="btn btn-sm assess-btn btn-secondary fw-medium">
+                            Start Mock Session &rarr;</a>
+                    </div>
+                    <div class="chart-container" style="position: relative; height: 160px;">
+                        <canvas class="chart-canvas" id="interview"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <div class="row g-3 align-content-center">
+        <!-- Learning Roadmap -->
+        <div class="col-md-4">
+            <div class="card roadmap-card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="roadmap-hero mb-0">
+                            <i class="fas fa-book-bookmark me-2"></i>Learning Roadmap
+                        </h6>
+                    </div>
+                    {% for skills, status in skillset %}
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-medium">{{skills}}</span>
+                        <span class="badge status-badge {{status}} text-uppercase">{{status}}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <!-- Quick Actions -->
+        <div class="col-md-4">
+            <div class="card roadmap-card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="roadmap-hero mb-3">
+                        <i class="fas fa-bolt me-2"></i>AI Career Accelerators
+                    </h6>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'ats_resume' %}" class="btn btn-sm btn-outline-primary fw-medium text-center ">
+                            <i class="fas fa-file-shield me-2"></i>ATS Resume Optimizer
+                        </a>
+                        <a href="{% url 'project_verify' %}" class="btn btn-sm btn-outline-success fw-medium text-center">
+                            <i class="fas fa-medal me-2"></i>Project Skill Verification
+                        </a>
+                        
+                        <a href="{% url 'interview' %}" class="btn btn-sm btn-outline-secondary fw-medium text-center">
+                            <i class="fas fa-microphone me-2"></i>AI Mock Interview
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Career Insight -->
+        <div class="col-md-4">
+            <div class="card roadmap-card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="roadmap-hero mb-3">
+                        <i class="fas fa-user-check me-2"></i>Career Readiness Index
+                    </h6>
+                    {% for name, count in career_insight %}
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="fw-medium">{{name}}</span>
+                        <span>{{count}}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>
+
+{% endblock %}
