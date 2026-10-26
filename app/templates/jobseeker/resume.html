@@ -1,0 +1,244 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <!-- Header -->
+    <h4 class="skill-hero fw-medium">
+        <i class="fas fa-file-shield me-2"></i>ATS Resume Optimizer
+    </h4>
+    <span class="skill-hero">Improve your resume with AI-powered keyword and skill optimization.</span>
+        
+    <div class="row g-3 mb-4">
+        <div class="col-md-8">
+            <div class="card skill-card mt-4" style="height: 89%;">
+                <div class="card-body">
+                    <form method="post" class="profile-form" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-muted fw-medium mb-2 ">
+                                    <i class="fas fa-user-tie me-1"></i>Target Role</label>
+                                <select name="target_role" class="form-select form-select-sm rounded-3 mb-1">
+                                    <option value="">Choose a Role</option>
+                                    {% for role_label, role_key in roles %}
+                                    <option value="{{ role_key }}">{{ role_label }}</option>
+                                {% endfor %}
+                                </select>
+                                <small class="text-muted">Role benchmarks against industry skill matrices.</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-muted fw-medium mb-2">
+                                    <i class="fas fa-file-lines me-1"></i>Upload Resume</label>
+                                <input type="file" name="resume_file" accept=".pdf"
+                                    class="form-control form-control-sm rounded-3 mb-1">
+                                <small class="text-muted">Leave empty to evaluate your active SkillNova Profile.</small>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            <button type="submit" class="btn btn-sm add-btn fw-medium me-2">
+                                <i class="fas fa-wand-magic-sparkles me-2"></i>Analyze Resume
+                            </button>
+                            {% if analysis %}
+                            <a href="{% url 'download_ats_resume' %}" target="_blank" class="btn btn-sm del-btn assess-btn fw-medium">
+                                <i class="fas fa-download me-2"></i>Export Resume</a>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="col-md-4">
+            <div class="card skill-card mt-4">
+                <div class="card-body">
+                    <h6 class="mb-2">
+                        <i class="fa-solid fa-bolt me-2"></i>Quick Actions
+                    </h6>
+                    <div class="d-grid gap-3">
+                        <a href="#" class="btn btn-sm del-btn text-center fw-medium mb-1">
+                            <i class="fa-solid fa-map me-2"></i>Learning Roadmap
+                            <i class="fa-solid fa-arrow-right float-end mt-1"></i>
+                        </a>
+                        <a href="#" class="btn btn-sm add-btn text-center fw-medium mb-1">
+                            <i class="fa-solid fa-code me-2"></i>Practice Skills
+                            <i class="fa-solid fa-arrow-right float-end mt-1"></i>
+                        </a>
+                        <a href="#" class="btn btn-sm btn-secondary text-center fw-medium">
+                            <i class="fa-solid fa-file-pen me-2"></i>Improve Resume
+                            <i class="fa-solid fa-arrow-right float-end mt-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Results Dashboard -->
+    <div class="row g-3 mb-4">
+        <!-- ATS Evaluation -->
+        <div class="col-md-4">
+            <div class="card skill-card h-100">
+                <div class="card-body">
+                    <h6 class="fw-medium mb-3 skill-hero">
+                        <i class="fas fa-sliders me-2"></i>ATS Evaluation Vectors</h6>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between small fw-semibold mb-1">
+                            <span>Keyword Alignment</span>
+                            <span>{{ analysis.keyword_score }}%</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar ats-progress" style="--progress: {{ analysis.keyword_score }}%;"></div>
+                        </div>
+                    </div> 
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between small fw-semibold mb-1">
+                            <span>Section Completeness</span>
+                            <span>{{ analysis.section_score }}%</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar module-progress bg-success" style="--progress: {{ analysis.section_score }}%;"></div>
+                        </div>
+                    </div>   
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between small fw-semibold mb-1">
+                            <span>Formatting & Length</span>
+                            <span>{{ analysis.length_score }}%</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar roadmap-progress" style="--progress: {{ analysis.length_score }}%;"></div>
+                        </div>
+                    </div>
+                </div>    
+            </div>
+        </div>
+
+        <!-- Main ATS Score Card -->
+        <div class="col-md-4">
+            <div class="card skill-card rounded-3 h-100">
+                <div class="card-body">
+                    <h6 class="fw-medium">Overall ATS Score</h6>
+                    <div class="display-5 text-center skill-hero fw-medium mt-2 mb-1">
+                        {{ analysis.score|default:'0'}}%</div>
+                    <div class="text-center mb-3">
+                        {% if analysis.score >= 80 %}
+                        <span class="badge bg-success text-white px-3 py-2 rounded-pill">
+                            <i class="fas fa-check-circle me-1"></i>ATS Optimized</span>
+                        {% elif analysis.score >= 60 %}
+                        <span class="badge bg-warning-subtle text-dark px-3 py-2 rounded-pill">
+                            <i class="fas fa-triangle-exclamation me-1"></i>Moderate Compatibility</span>
+                        {% elif analysis.score < 60 %}
+                        <span class="badge bg-danger text-white px-3 py-2 rounded-pill">
+                            <i class="fas fa-circle-xmark me-1"></i>Needs Optimization</span>
+                        {% else %}
+                        <span class="badge bg-secondary px-3 py-2 rounded-pill">
+                            <i class="fas fa-chart-line me-1"></i>Perform ATS Analysis</span>
+                        {% endif %}
+                    </div> 
+                    <div class="d-flex justify-content-between border-bottom mb-2">
+                        <span class="small fw-medium text-muted"><i class="fas fa-file-word me-2"></i>Words</span>
+                        <span class="small text-muted">{{ analysis.word_count|default:'0' }} words</span>
+                    </div>
+                    <div class="d-flex justify-content-between border-bottom">
+                        <span class="small fw-medium text-muted"><i class="fas fa-key me-2"></i>Keywords</span>
+                        <span class="small text-muted">{{ analysis.matched_skills|length }} words</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Evaluation -->
+        <div class="col-md-4">
+            <div class="card skill-card h-100">
+                <div class="card-body">
+                    <h6 class="fw-medium skill-hero mb-3">
+                        <i class="fas fa-layer-group me-2"></i>Section Analysis
+                    </h6>
+                    <div class="fw-medium text-success mb-2">
+                        <i class="fas fa-circle-check me-1"></i>Detected Sections:</div>
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        {% for section in analysis.detected_section_names %}
+                        <span class="badge bg-success-subtle text-success-emphasis">
+                            <i class="fas fa-check me-1"></i>{{section}}
+                        </span>
+                        {% empty %}
+                        <span class="text-muted small">No Sections Detected</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="fw-medium text-danger mb-2">
+                        <i class="fas fa-circle-exclamation me-1"></i>Missing Sections:</div>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for section in analysis.missing_sections %}
+                        <span class="badge bg-danger-subtle text-danger-emphasis">
+                            <i class="fas fa-plus me-1"></i>{{section}}
+                        </span>
+                        {% empty %}
+                        <span class="text-success small fw-medium">
+                            <i class="fas fa-thumbs-up me-1"></i>All sections detected!
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+
+    <div class="row g-3 mb-4">
+        <!-- Keyword Analysis -->
+        <div class="col-md-5">
+            <div class="card h-100 skill-card">
+                <div class="card-body">
+                    <h6 class="skill-hero mb-3"><i class="fas fa-key me-2"></i>Keyword Analysis</h6>
+                    <!-- Matched Keywords -->
+                    <h6 class="fw-medium text-success mb-2">
+                        <i class="fas fa-circle-check me-2"></i>Matched Critical Keywords : {{ analysis.matched_skills|length }}
+                    </h6>
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        {% for skill in analysis.matched_skills %}
+                        <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle">
+                            <i class="fas fa-check me-1 small"></i>{{ skill }}
+                        </span>
+                        {% empty %}
+                        <span class="text-muted small">No target keywords matched yet.</span>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Missing Keywords -->
+                    <h6 class="fw-medium text-danger">
+                        <i class="fas fa-circle-exclamation me-2"></i>Missing Recommended Keywords : {{ analysis.missing_skills|length }}
+                    </h6> 
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for skill in analysis.missing_skills %}
+                        <span class="badge bg-danger-subtle text-danger-emphasis border border-danger-subtle">
+                            <i class="fas fa-plus me-1 small"></i>{{ skill }}
+                        </span>
+                        {% empty %}
+                        <span class="text-success small fw-medium"><i class="fas fa-thumbs-up me-1"></i>All targeted role keywords matched!</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Recommendations -->
+        <div class="col-md-7">
+            <div class="card skill-card h-100">
+                <div class="card-body">
+                    <h6 class="fw-medium skill-hero mb-3">
+                        <i class="fas fa-lightbulb me-2"></i>AI Recommendations
+                    </h6>
+                    <div class="d-grid">
+                        {% for sug in analysis.suggestions %}
+                        <span class="skill-hero mb-2">
+                            <i class="fas fa-circle-arrow-right me-2"></i>{{sug}}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>
+{% endblock %}
