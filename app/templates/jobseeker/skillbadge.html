@@ -1,0 +1,72 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="skill-hero fw-medium mb-1">
+                <i class="fas fa-trophy me-2"></i>Skill Badges</h4>
+                <span class="skill-hero">Showcase your verified skills and achievements.</span>
+        </div>
+        <a href="{% url 'project_verify' %}" class="btn btn-sm assess-btn del-btn fw-medium">
+            <i class="fas fa-medal me-1"></i>Verify Skills</a>
+    </div>
+    <div class="row g-3">
+        {% for project in verified %}
+        <div class="col-md-4">
+            <div class="card skill-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <div class="skill-hero">
+                            <div class="fw-medium text-success mb-1">
+                                <i class="fas fa-medal me-2"></i>{{project.badge_name}}
+                            </div>
+                            <div class="text-muted">Level:<span class="ms-2 fw-semibold">{{project.badge_level}}</span></div>
+                        </div>
+                        <div class="text-success text-center justify-content-center">
+                            <h3 class="mb-0">{{project.ai_score}}%</h6>
+                            <small class="text-muted">AI Score</small>  
+                        </div>
+                    </div>
+                    <button type="button" data-bs-toggle="collapse" data-bs-target="#project-{{project.id}}" 
+                    class="btn btn-sm assess-btn del-btn">
+                        <i class="fas fa-folder-open me-2"></i>Project
+                    </button>
+                    <!-- Project Pane -->
+                    <div class="collapse mt-3" id="project-{{project.id}}">
+                        <div class="d-grid">
+                            <h6 class="mb-2 fw-semibold border-bottom">Project Details</h6>
+                            <span class="text-muted mb-1"><i class="fas fa-code me-2"></i>
+                                {{project.title}} <span class="small fw-medium"> . </span>{{project.get_domain_display}}
+                            </span>
+                            <span class="text-muted mb-1"><i class="fas fa-microchip me-2"></i>{{project.technology}}</span>
+                            <span class="text-muted">
+                                <a href="{{ project.repo_url }}" target="_blank" 
+                                class="text-muted text-decoration-none me-3">
+                                    <i class="fab fa-github me-2"></i>Repository
+                                </a>
+                                <a href="{{ project.live_url }}" target="_blank" 
+                                class="text-muted text-decoration-none me-3">
+                                    <i class="fas fa-globe me-2"></i>Live URL
+                                </a>
+                            </span>
+                        </div>
+                        
+                    </div> 
+                </div>    
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center mt-5">
+            <div class="mb-3">
+            <i class="fas fa-trophy text-muted"
+               style="font-size: 3rem;"></i>
+        </div>
+
+        <h6 class="fw-semibold mb-2">No Skill Badges Yet</h6>
+        <p class="text-muted mb-4">Complete a project verification to earn
+            your first verified skill badge.</p>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}
