@@ -1,0 +1,131 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+<section class="container-fluid p-4">
+    <div class="mb-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="comp-hero fw-bold mb-0"><i class="fas fa-briefcase me-2"></i>Post New Job</h4>
+            <a class="btn btn-sm btn-outline-primary fw-medium px-3" href="{% url 'listing' %}">
+                <i class="fas fa-eye me-1"></i>View All Jobs
+            </a>
+        </div>
+        <small class="text-muted">Create and publish a new hiring opportunity for candidates in the SkillNova AI ecosystem.</small>
+    </div>
+
+    <div class="row g-3 mt-1">
+        <div class="col-md-8">
+            <div class="job-card bg-light px-4 py-3 rounded-3 shadow-sm">
+                <form class="profile-form" method="post" action="{% url 'postJob' %}">
+                    {% csrf_token %}
+                    <!-- Job Information -->
+                    <h6 class="comp-hero mb-3 fw-bold"><i class="fas fa-circle-info me-2"></i>Job Information</h6>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="fw-medium form-label small text-muted">JOB TITLE *</label>
+                            <input type="text" class="form-control form-control-sm" placeholder="e.g. Python Developer" name="job" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="fw-medium form-label small text-muted">LOCATION *</label>
+                            <input type="text" class="form-control form-control-sm" placeholder="e.g. Kochi, Kerala" name="location" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="fw-medium form-label small text-muted">WORK MODE *</label>
+                            <select class="form-select form-select-sm" name="work_mode" required>
+                                {% for mode in work %}
+                                <option value="{{ mode }}">{{ mode }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-3 mt-1">
+                        <div class="col-md-6">
+                            <label class="fw-medium form-label small text-muted">SALARY RANGE</label>
+                            <input type="text" class="form-control form-control-sm" placeholder="e.g. ₹6,00,000 - ₹9,00,000 P.A." name="salary_range">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-medium form-label small text-muted">OPENINGS COUNT</label>
+                            <input type="number" class="form-control form-control-sm" value="5" min="1" name="count">
+                        </div>
+                    </div>
+                    <hr class="my-3"> 
+
+                    <!-- Job Requirements -->
+                    <h6 class="comp-hero mb-3 fw-bold"><i class="fas fa-clipboard-list me-2"></i>Candidate Requirements</h6>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="fw-medium form-label small text-muted">EXPERIENCE LEVEL</label>
+                            <select class="form-select form-select-sm" name="experience">
+                                {% for exp, val in experience %}
+                                <option value="{{ exp }}">{{ exp }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="fw-medium form-label small text-muted">MINIMUM QUALIFICATION</label>
+                            <input type="text" class="form-control form-control-sm" placeholder="e.g. B.Tech CS, MCA" name="qualification">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="fw-medium form-label small text-muted">APPLICATION DEADLINE</label>
+                            <input class="form-control form-control-sm" type="date" name="deadline">
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <label class="fw-medium form-label small text-muted">REQUIRED TECHNICAL SKILLS * (SELECT MULTIPLE)</label>
+                        <select name="skills" class="form-select form-select-sm skill-select" multiple size="4" required>
+                            {% for tskill in skills %}
+                            <option value="{{ tskill }}">{{ tskill }}</option>
+                            {% endfor %}
+                        </select>
+                        <small class="text-muted">Hold Ctrl/Cmd to select multiple core skills for AI matching.</small>
+                    </div>
+
+                    <div class="mt-3">
+                        <label class="fw-medium form-label small text-muted">JOB DESCRIPTION & RESPONSIBILITIES</label>
+                        <textarea class="form-control form-control-sm" rows="3" name="description" placeholder="Outline the key role responsibilities, team structure, and performance expectations..."></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-end mt-4">
+                        <button type="submit" class="btn btn-sm btn-primary fw-medium px-4 py-2 rounded-3 shadow-sm">
+                            <i class="fas fa-paper-plane me-2"></i>Publish Job Posting
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <!-- AI Matching Tip -->
+            <div class="card border-0 shadow-sm rounded-3 mb-3 bg-white" style="border-left: 5px solid #085c58 !important;">
+                <div class="card-body">
+                    <h6 class="fw-bold text-dark mb-2"><i class="fas fa-wand-magic-sparkles text-warning me-2"></i>AI Automated Screening</h6>
+                    <p class="small text-muted mb-0">Once published, candidates who apply will automatically be scored using the <strong>SkillNova AI Suitability Engine</strong>. Candidates with verified project badges receive priority shortlisting recommendations.</p>
+                </div>
+            </div>
+
+            <!-- Quick Navigation -->
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-3"><i class="fas fa-bolt me-1 text-primary"></i>Recruiter Navigation</h6>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'recruiter' %}" class="btn btn-sm btn-outline-primary text-start">
+                            <i class="fas fa-home me-2"></i>Dashboard
+                        </a>
+                        <a href="{% url 'listing' %}" class="btn btn-sm btn-outline-success text-start">
+                            <i class="fas fa-briefcase me-2"></i>Active Job Listings
+                        </a>
+                        <a href="{% url 'candidate' %}" class="btn btn-sm btn-outline-secondary text-start">
+                            <i class="fas fa-users me-2"></i>Verified Candidates
+                        </a>
+                        <a href="{% url 'screening' %}" class="btn btn-sm btn-outline-info text-start">
+                            <i class="fas fa-bullseye me-2"></i>Automated Screening
+                        </a>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</section>    
+{% endblock %}

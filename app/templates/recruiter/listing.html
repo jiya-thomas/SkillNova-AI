@@ -1,0 +1,163 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+<section class="container-fluid p-4">
+    <div class="mb-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="comp-hero fw-bold mb-0"><i class="fas fa-briefcase me-2"></i>Job Postings Management</h4>
+            <a class="btn btn-sm btn-primary fw-medium px-3 shadow-sm" href="{% url 'postJob' %}">
+                <i class="fas fa-plus me-1"></i>Post New Job
+            </a>
+        </div>
+        <small class="text-muted">Manage, track, and optimize your published job openings and review candidate application volume.</small>
+    </div>
+
+    <!-- Job Filter -->
+    <div class="bg-light-subtle p-3 rounded-3 shadow-sm mb-3 border">
+        <form class="candid-filter" method="get">
+            <div class="row g-2">
+                <div class="col-12 col-md-4">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text"><i class="fas fa-search comp-hero"></i></span>
+                        <input class="form-control" type="text" name="search" value="{{ query }}" placeholder="Search by Job Title or Location">
+                    </div>
+                </div>
+                <div class="col-12 col-md-3">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text"><i class="fas fa-building comp-hero"></i></span>
+                        <select class="form-select form-select-sm" name="mode">
+                            <option value="">All Work Modes</option>
+                            {% for m in work %}
+                            <option value="{{ m }}" {% if mode_filter == m %}selected{% endif %}>{{ m }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-md-3">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text"><i class="fas fa-circle-check comp-hero"></i></span>
+                        <select class="form-select form-select-sm" name="status">
+                            <option value="">All Statuses</option>
+                            <option value="Active" {% if status_filter == 'Active' %}selected{% endif %}>Active</option>
+                            <option value="Closed" {% if status_filter == 'Closed' %}selected{% endif %}>Closed</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-md-2">
+                    <div class="d-flex gap-1">
+                        <button type="submit" class="btn btn-sm btn-primary w-100"><i class="fas fa-filter me-1"></i>Filter</button>
+                        <a href="{% url 'listing' %}" class="btn btn-sm btn-outline-secondary"><i class="fas fa-xmark"></i></a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div> 
+
+    <!-- Job Table -->
+    <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-body p-0 table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light small text-muted text-uppercase">
+                    <tr>
+                        <th class="ps-3">#</th>
+                        <th>Job Title</th>
+                        <th>Location & Mode</th>
+                        <th>Applications</th>
+                        <th>Closing Date</th>
+                        <th>Status</th>
+                        <th class="text-end pe-3">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="jobAccordion">
+                    {% for job in jobs %}
+                    <tr>
+                        <td class="ps-3 fw-bold text-muted">{{ forloop.counter }}</td> 
+                        <td>
+                            <strong class="d-block text-dark">{{ job.title }}</strong>
+                            <small class="text-muted">{{ job.company_name }} &bull; Openings: {{ job.openings }}</small>
+                        </td>
+                        <td>
+                            <div><i class="fas fa-location-dot me-1 text-danger"></i>{{ job.location }}</div>
+                            <span class="badge bg-light text-dark border small">{{ job.work_mode }}</span>
+                        </td> 
+                        <td>
+                            <a href="{% url 'applications' %}?job_id={{ job.id }}" class="badge bg-primary text-decoration-none px-2 py-1">
+                                <i class="fas fa-users me-1"></i>{{ job.app_count }} Applied
+                            </a>
+                            <a href="{% url 'screening' %}?job_id={{ job.id }}" class="badge bg-warning-subtle text-dark border border-warning-subtle text-decoration-none ms-1 px-2 py-1">
+                                <i class="fas fa-bullseye me-1"></i>Screen
+                            </a>
+                        </td>
+                        <td class="small">{{ job.deadline|date:"M d, Y"|default:"Open until filled" }}</td>
+                        <td>
+                            {% if job.status == 'Active' %}
+                            <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">Active</span>
+                            {% else %}
+                            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1">Closed</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end pe-3">
+                            <button class="btn btn-sm btn-outline-secondary me-1" data-bs-toggle="collapse" data-bs-target="#jobDetails{{ job.id }}" title="View Details">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <a href="{% url 'toggle_job_status' job.id %}" class="btn btn-sm {% if job.status == 'Active' %}btn-outline-warning{% else %}btn-outline-success{% endif %} me-1" title="Toggle Active/Closed">
+                                <i class="fas {% if job.status == 'Active' %}fa-pause{% else %}fa-play{% endif %}"></i>
+                            </a>
+                            <a href="{% url 'delete_job' job.id %}" onclick="return confirm('Delete this job posting?');" class="btn btn-sm btn-outline-danger" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <!-- Job Expandable Details -->
+                    <tr>
+                        <td colspan="7" class="p-0 border-0">
+                            <div class="collapse" id="jobDetails{{ job.id }}" data-bs-parent="#jobAccordion">
+                                <div class="bg-light p-3 border-bottom small">
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <strong class="d-block text-muted">Required Skills</strong>
+                                            <div class="d-flex flex-wrap gap-1 mt-1">
+                                                {% for s in job.skills_list %}
+                                                <span class="badge bg-white text-dark border">{{ s }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <strong class="d-block text-muted">Experience & Qualification</strong>
+                                            <div>{{ job.experience }} &bull; {{ job.qualification|default:"Graduate" }}</div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <strong class="d-block text-muted">Salary Range</strong>
+                                            <div>{{ job.salary_range|default:"Competitive based on skills" }}</div>
+                                        </div>
+                                        <div class="col-md-2 text-end">
+                                            <a href="{% url 'screening' %}?job_id={{ job.id }}" class="btn btn-xs btn-primary mt-2">
+                                                <i class="fas fa-wand-magic-sparkles me-1"></i>Run Screening
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% if job.description %}
+                                    <div class="mt-2 pt-2 border-top text-secondary">
+                                        {{ job.description }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td class="text-muted text-center py-5" colspan="7">
+                            <i class="fas fa-briefcase fs-1 opacity-25 mb-2 d-block"></i>
+                            <p class="mb-2">No job listings found.</p>
+                            <a href="{% url 'postJob' %}" class="btn btn-sm btn-primary">Create Your First Job Posting</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div> 
+</section>
+{% endblock %}
