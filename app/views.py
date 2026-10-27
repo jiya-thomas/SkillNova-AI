@@ -723,7 +723,7 @@ def interview(request):
     context={"menu":stud_menu,"roles":role.items(),
              "types":interview_type,"experience":experience.items()}
     if request.method == 'POST':
-        role_name = request.POST.get('role')
+        role_name = request.POST.get('target_role')
         interview_level = request.POST.get('type')
         experience_name = request.POST.get('experience')
         
@@ -818,6 +818,10 @@ def session(request):
 
 @login_required
 def analysis(request):
+    role_name = request.session.get('role_name')
+    interview = request.session.get('interview', {})
+    interview_level = interview.get('type','--')
+    exp_name = interview.get('experience','--')
     scores = request.session.get('interview_scores',[])
     overall_score = request.session.get('overall_score',0)
 
@@ -839,12 +843,27 @@ def analysis(request):
     if total_keywords:
         skill_coverage = round((total_matched / total_keywords) * 100)
     else:
-        skill_coverage = 0    
+        skill_coverage = 0  
+
+    # Answer Analysis 
+    strong = sum(
+        1 for item in scores
+        if item.get('score',0)>=80
+    )  
+    good = sum(
+        1 for item in scores
+        if 50 <= item.get('score',0)<80
+    )
+    improve = sum(
+        1 for item in scores
+        if item.get('score', 0) < 50
+    )
     
-    context={"menu":stud_menu,'role':role.items(),
+    context={"menu":stud_menu,'role_name':role_name, 
+        "type": interview_level,'experience':exp_name,
         'question_results':scores, 'overall_score':overall_score,
         "keyword_score":keyword_score,"similarity_score":similarity_score,
-        "skill_coverage":skill_coverage
+        "skill_coverage":skill_coverage,'strong':strong,'good':good,'improve':improve
     }
     return render(request,'jobseeker/analysis.html',context)
 
