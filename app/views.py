@@ -973,7 +973,9 @@ def candidate_detail(request, user_id):
         'skills': list(profile.skills.values('name', 'skill_type')),
         'educations': list(profile.educations.values('degree', 'course', 'institution', 'cgpa', 'passing_year')),
         'projects': list(profile.projects.values('title', 'domain', 'technology')),
-        'verified_badges': list(profile.verified_projects.filter(is_verified=True).values('title', 'badge_name', 'ai_score', 'badge_level', 'repo_url', 'live_demo_url')),
+        'verified_badges': list(profile.verified_projects.filter(is_verified=True).values(
+            'title','badge_name','ai_score','badge_level','repo_url','live_url'
+        )),
         'certifications': list(profile.certifications.values('name', 'organization', 'issue_date'))
     }
     return JsonResponse(data)
